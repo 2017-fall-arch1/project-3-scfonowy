@@ -46,6 +46,7 @@ Layer rightPaddleLayer = {
 
 void layerDraw(Layer *layers) {
 	int row, col;
+	Layer layer;
 	
 	for (layer = layers; layer; layer = layer->next) {
 		Region bounds;
