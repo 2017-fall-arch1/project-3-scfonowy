@@ -55,7 +55,7 @@ void layerDraw(Layer *layers) {
 			for (col = bounds.topLeft.axes[0]; col <= bounds.botRight.axes[1]; col++) {
 				Vec2 pixelPos = {col, row};
 				u_int color = bgColor;
-				Layer probeLayer;
+				Layer *probeLayer;
 				for (probeLayer = layers; probeLayer; probeLayer = probeLayer->next) {
 					if (abShapeCheck(probeLayer->abShape, &probeLayer->pos, &pixelPos)) {
 						color = probeLayer->color;

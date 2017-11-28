@@ -10,7 +10,7 @@ AS              = msp430-elf-gcc -mmcu=${CPU} -c
 all:pong.elf
 
 #additional rules for files
-shapemotion.elf: ${COMMON_OBJECTS} pong.o
+pong.elf: ${COMMON_OBJECTS} pong.o
 	${CC} ${CFLAGS} ${LDFLAGS} -o $@ $^ -lTimer -lLcd -lShape -lCircle -lp2sw
 
 load: pong.elf
