@@ -30,7 +30,7 @@ Layer baseLayer = {
 
 Layer leftPaddleLayer = {
 	(AbShape *)&leftPaddleShape,
-	{15, 15}, // bottom left
+	{15, 30}, // bottom left
 	{0,0}, {0,0}, // previous & next positions
 	COLOR_WHITE, // color
 	&baseLayer // next layer
@@ -38,15 +38,15 @@ Layer leftPaddleLayer = {
 
 Layer rightPaddleLayer = {
 	(AbShape *)&rightPaddleShape,
-	{screenWidth - 15, 15}, // bottom right
+	{screenWidth - 15, 30}, // bottom right
 	{0,0}, {0,0},
 	COLOR_RED,
 	&leftPaddleLayer
 };
 
-void layerDraw(Layer *layers) {
+void myLayerDraw(Layer *layers) {
 	int row, col;
-	Layer layer;
+	Layer *layer;
 	
 	for (layer = layers; layer; layer = layer->next) {
 		Region bounds;
