@@ -10,8 +10,8 @@
 u_int bgColor = COLOR_BLUE; 
 
 // shape definitions
-AbRect leftPaddleShape = {abRectGetBounds, abRectCheck, {5,15}}; // 5 x 15 paddle
-AbRect rightPaddleShape = {abRectGetBounds, abRectCheck, {5,15}}; // 5 x 15 paddle
+AbRect leftPaddleShape = {abRectGetBounds, abRectCheck, {3,10}}; // 3 x 10 paddle
+AbRect rightPaddleShape = {abRectGetBounds, abRectCheck, {3,10}}; // 3 x 10 paddle
 
 AbRectOutline fieldOutline = { // field outline
 	abRectOutlineGetBounds, abRectOutlineCheck,
@@ -30,7 +30,7 @@ Layer baseLayer = {
 
 Layer leftPaddleLayer = {
 	(AbShape *)&leftPaddleShape,
-	{15, 30}, // bottom left
+	{15, 30}, // top left
 	{0,0}, {0,0}, // previous & next positions
 	COLOR_WHITE, // color
 	&baseLayer // next layer
@@ -38,7 +38,7 @@ Layer leftPaddleLayer = {
 
 Layer rightPaddleLayer = {
 	(AbShape *)&rightPaddleShape,
-	{screenWidth - 15, 30}, // bottom right
+	{screenWidth - 15, 30}, // top right
 	{0,0}, {0,0},
 	COLOR_RED,
 	&leftPaddleLayer
