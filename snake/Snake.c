@@ -8,7 +8,7 @@ Snake* snakeInit() {
 	
 	Layer* headLayer = (Layer *)malloc(sizeof(Layer)); // create & configure head shape layer
 	headLayer->abShape = (AbRect *)&headShape;
-	headLayer->pos = {(screenWidth/2), (screenHeight/2)};
+	headLayer->pos = (Vec2){(screenWidth/2), (screenHeight/2)};
 	headLayer->posLast = (Vec2){0,0};
 	headLayer->posNext = (Vec2){0,0};
 	headLayer->color = COLOR_WHITE;
@@ -82,6 +82,7 @@ bool snakeIsOutOfBounds(Snake* snake, Region* bounds) {
 		Layer* headLayer = snake->headLayer; // only need to check the head (it's snake yo)
 		Region snakeBounds;
 		abShapeGetBounds(snake->headLayer->abShape, snake->headLayer->pos, &snakeBounds);
+		int axis;
 		for (axis = 0; axis < 2; axis++) {
 			if ((snakeBounds.topLeft.axes[axis] < bounds->topLeft.axes[axis]) || (snakeBounds.botRight.axes[axis] > bounds->botRight.axes[axis]) ) {
 			  return true;
@@ -97,7 +98,7 @@ void snakeGrow(Snake* snake) {
 		Layer* newLayer = (Layer *)malloc(sizeof(Layer)); // create & configure the new segment layer
 		newLayer->abShape = (AbRect *)&headShape;
 		newLayer->posLast = (Vec2){0,0}; // will be set by snakeUpdate()
-		newLayer->posNext = {(Vec2)0,0};
+		newLayer->posNext = (Vec2){0,0};
 		newLayer->color = COLOR_WHITE;
 		newLayer->next = 0;
 		
@@ -125,7 +126,7 @@ void snakeDraw(Snake* snake) {
 		bounds.botRight.axes[0], bounds.botRight.axes[1]);
 		for (row = bounds.topLeft.axes[1]; row <= bounds.botRight.axes[1]; row++) {
 			for (col = bounds.topLeft.axes[0]; col <= bounds.botRight.axes[0]; col++) {
-				Vec2 pixelPos = {col, row};
+				Vec2 pixelPos = (Vec2){col, row};
 				u_int color = COLOR_BLUE;
 				Layer* probeLayer;
 				for (probeLayer = snake->headLayer; probeLayer; probeLayer = probeLayer->next) { /* probe all layers, in order */

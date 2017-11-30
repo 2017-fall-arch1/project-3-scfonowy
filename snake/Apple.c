@@ -6,7 +6,7 @@ Apple* appleInit() {
 	(Layer *)appleLayer = malloc(sizeof(Layer)); // create and configure apple layer
 	appleLayer->abShape = &circle2;
 	appleLayer->posLast = {0,0};
-	appleLayer->pos = {screenWidth/2 + 10, screenHeight/2 + 10};
+	appleLayer->pos = (Vec2){screenWidth/2 + 10, screenHeight/2 + 10};
 	appleLayer->posNext = {0,0};
 	appleLayer->color = COLOR_RED;
 	appleLayer->next = 0;
