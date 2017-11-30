@@ -79,7 +79,7 @@ bool snakeIsEatingApple(Snake* snake, Apple* apple) {
 // checks if the snake has collided with the bounds, returning true if so
 bool snakeIsOutOfBounds(Snake* snake, Region* bounds) {
 	if (snake != 0 && bounds != 0) {
-		(Layer *)headLayer = snake->headLayer; // only need to check the head (it's snake yo)
+		Layer* headLayer = snake->headLayer; // only need to check the head (it's snake yo)
 		Region snakeBounds;
 		abShapeGetBounds(snake->headLayer->abShape, snake->headLayer->pos, &snakeBounds);
 		for (axis = 0; axis < 2; axis++) {
@@ -94,7 +94,7 @@ bool snakeIsOutOfBounds(Snake* snake, Region* bounds) {
 // adds one segment to the snake (is overlaid on top of the tail for initial cycle)
 void snakeGrow(Snake* snake) {
 	if (snake != 0) {
-		(Layer *)newLayer = (Layer *)malloc(sizeof(Layer)); // create & configure the new segment layer
+		Layer* newLayer = (Layer *)malloc(sizeof(Layer)); // create & configure the new segment layer
 		newLayer->abShape = (AbRect *)&headShape;
 		newLayer->posLast = {0,0}; // will be set by snakeUpdate()
 		newLayer->posNext = {0,0};
@@ -127,7 +127,7 @@ void snakeDraw(Snake* snake) {
 			for (col = bounds.topLeft.axes[0]; col <= bounds.botRight.axes[0]; col++) {
 				Vec2 pixelPos = {col, row};
 				u_int color = COLOR_BLUE;
-				Layer *probeLayer;
+				Layer* probeLayer;
 				for (probeLayer = snake->headLayer; probeLayer; probeLayer = probeLayer->next) { /* probe all layers, in order */
 					if (abShapeCheck(probeLayer->abShape, &probeLayer->pos, &pixelPos)) {
 						color = probeLayer->color;
