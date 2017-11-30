@@ -3,16 +3,19 @@
 
 #include <shape.h>
 #include <stdbool.h>
+#include <lcdutils.h>
+#include <lcddraw.h>
 #include "Apple.h"
 
 typedef struct Snake {
 	struct Layer* headLayer;
+	struct Layer* tailLayer;
 	struct Vec2* direction;
 } Snake;
 
 Snake* snakeInit();
 
-bool snakeUpdate(Snake* snake);
+void snakeUpdate(Snake* snake);
 
 bool snakeIsEatingSelf(Snake* snake);
 
