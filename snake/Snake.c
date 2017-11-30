@@ -9,8 +9,8 @@ Snake* snakeInit() {
 	Layer* headLayer = (Layer *)malloc(sizeof(Layer)); // create & configure head shape layer
 	headLayer->abShape = (AbRect *)&headShape;
 	headLayer->pos = {(screenWidth/2), (screenHeight/2)};
-	headLayer->posLast = {0,0};
-	headLayer->posNext = {0,0};
+	headLayer->posLast = (Vec2){0,0};
+	headLayer->posNext = (Vec2){0,0};
 	headLayer->color = COLOR_WHITE;
 	headLayer->next = 0;
 	
@@ -66,7 +66,7 @@ bool snakeIsEatingApple(Snake* snake, Apple* apple) {
 		int col;
 		for (row = appleBounds.topLeft.axes[1]; row <= appleBounds.botRight.axes[1]; row++) {
 			for (col = appleBounds.topLeft.axes[0]; col <= appleBounds.botRight.axes[0]; col++) {
-				Vec2 pixelPos = {row, col};
+				Vec2 pixelPos = (Vec2){row, col};
 				if (abShapeCheck(snake->headLayer->abShape, snake->headLayer->pos, &pixelPos)) {
 					return true;
 				}
@@ -96,8 +96,8 @@ void snakeGrow(Snake* snake) {
 	if (snake != 0) {
 		Layer* newLayer = (Layer *)malloc(sizeof(Layer)); // create & configure the new segment layer
 		newLayer->abShape = (AbRect *)&headShape;
-		newLayer->posLast = {0,0}; // will be set by snakeUpdate()
-		newLayer->posNext = {0,0};
+		newLayer->posLast = (Vec2){0,0}; // will be set by snakeUpdate()
+		newLayer->posNext = {(Vec2)0,0};
 		newLayer->color = COLOR_WHITE;
 		newLayer->next = 0;
 		
