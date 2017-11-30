@@ -6,6 +6,7 @@
 #include <abCircle.h>
 #include <lcdutils.h>
 #include <lcddraw.h>
+#include <stdlib.h>
 
 typedef struct Apple {
 	struct Layer* appleLayer;

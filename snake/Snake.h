@@ -3,6 +3,7 @@
 
 #include <shape.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include <lcdutils.h>
 #include <lcddraw.h>
 #include "Apple.h"

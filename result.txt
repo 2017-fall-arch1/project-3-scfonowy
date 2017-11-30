@@ -1,0 +1,121 @@
+(cd timerLib; make install)
+make[1]: Entering directory '/home/student/Project 3/project-3-scfonowy/timerLib'
+msp430-elf-gcc -mmcu=msp430g2553 -Os   -c -o clocksTimer.o clocksTimer.c
+msp430-elf-as   -o sr.o sr.s
+msp430-elf-ar crs libTimer.a clocksTimer.o sr.o
+mkdir -p ../h ../lib
+mv libTimer.a ../lib
+cp *.h ../h
+make[1]: Leaving directory '/home/student/Project 3/project-3-scfonowy/timerLib'
+(cd lcdLib; make install)
+make[1]: Entering directory '/home/student/Project 3/project-3-scfonowy/lcdLib'
+msp430-elf-gcc -mmcu=msp430g2553 -Os -I../h    -c -o font-11x16.o font-11x16.c
+msp430-elf-gcc -mmcu=msp430g2553 -Os -I../h    -c -o font-5x7.o font-5x7.c
+msp430-elf-gcc -mmcu=msp430g2553 -Os -I../h    -c -o font-8x12.o font-8x12.c
+msp430-elf-gcc -mmcu=msp430g2553 -Os -I../h    -c -o lcdutils.o lcdutils.c
+msp430-elf-gcc -mmcu=msp430g2553 -Os -I../h    -c -o lcddraw.o lcddraw.c
+msp430-elf-ar crs libLcd.a font-11x16.o font-5x7.o font-8x12.o lcdutils.o lcddraw.o
+mkdir -p ../h ../lib
+mv libLcd.a ../lib
+cp *.h ../h
+make[1]: Leaving directory '/home/student/Project 3/project-3-scfonowy/lcdLib'
+(cd shapeLib; make install)
+make[1]: Entering directory '/home/student/Project 3/project-3-scfonowy/shapeLib'
+msp430-elf-gcc -mmcu=msp430g2553 -Os -I../h    -c -o shape.o shape.c
+msp430-elf-gcc -mmcu=msp430g2553 -Os -I../h    -c -o region.o region.c
+msp430-elf-gcc -mmcu=msp430g2553 -Os -I../h    -c -o rect.o rect.c
+msp430-elf-gcc -mmcu=msp430g2553 -Os -I../h    -c -o vec2.o vec2.c
+msp430-elf-gcc -mmcu=msp430g2553 -Os -I../h    -c -o layer.o layer.c
+msp430-elf-gcc -mmcu=msp430g2553 -Os -I../h    -c -o rarrow.o rarrow.c
+msp430-elf-ar crs libShape.a shape.o region.o rect.o vec2.o layer.o rarrow.o
+mkdir -p ../h ../lib
+mv libShape.a ../lib
+cp *.h ../h
+make[1]: Leaving directory '/home/student/Project 3/project-3-scfonowy/shapeLib'
+(cd circleLib; make install)
+make[1]: Entering directory '/home/student/Project 3/project-3-scfonowy/circleLib'
+msp430-elf-gcc -mmcu=msp430g2553 -Os -I../h   -c -o abCircle.o abCircle.c
+cc -o makeCircles makeCircles.c
+rm -rf circles; mkdir circles
+./makeCircles
+cat _abCircle.h abCircle_decls.h > abCircle.h
+(cd circles; msp430-elf-gcc -I.. -I../../h -mmcu=msp430g2553 -Os -c *.c)
+msp430-elf-ar crs libCircle.a circles/*.o abCircle.o
+mkdir -p ../h ../lib
+cp libCircle.a ../lib
+cp abCircle.h chordVec.h ../h
+make[1]: Leaving directory '/home/student/Project 3/project-3-scfonowy/circleLib'
+(cd p2swLib; make install)
+make[1]: Entering directory '/home/student/Project 3/project-3-scfonowy/p2swLib'
+msp430-elf-gcc -mmcu=msp430g2553 -Os -I../h    -c -o p2switches.o p2switches.c
+msp430-elf-ar crs libp2sw.a p2switches.o
+mkdir -p ../h ../lib
+mv libp2sw.a ../lib
+cp *.h ../h
+make[1]: Leaving directory '/home/student/Project 3/project-3-scfonowy/p2swLib'
+(cd p2sw-demo; make)
+make[1]: Entering directory '/home/student/Project 3/project-3-scfonowy/p2sw-demo'
+msp430-elf-gcc -mmcu=msp430g2553 -Os -I../h   -c -o p2sw-demo.o p2sw-demo.c
+msp430-elf-gcc -mmcu=msp430g2553 -Os -I../h -L../lib -L/opt/ti/msp430_gcc/include/  -o p2sw-demo.elf p2sw-demo.o -lLcd -lp2sw -lTimer
+make[1]: Leaving directory '/home/student/Project 3/project-3-scfonowy/p2sw-demo'
+(cd shape-motion-demo; make)
+make[1]: Entering directory '/home/student/Project 3/project-3-scfonowy/shape-motion-demo'
+msp430-elf-gcc -mmcu=msp430g2553 -Os -I../h   -c -o shapemotion.o shapemotion.c
+msp430-elf-gcc -mmcu=msp430g2553 -c   -o wdt_handler.o wdt_handler.s
+msp430-elf-gcc -mmcu=msp430g2553 -Os -I../h -L../lib -L/opt/ti/msp430_gcc/include/  -o shapemotion.elf shapemotion.o wdt_handler.o -lTimer -lLcd -lShape -lCircle -lp2sw
+make[1]: Leaving directory '/home/student/Project 3/project-3-scfonowy/shape-motion-demo'
+(cd snake; make)
+make[1]: Entering directory '/home/student/Project 3/project-3-scfonowy/snake'
+msp430-elf-gcc -mmcu=msp430g2553 -Os -I../h   -c -o main.o main.c
+msp430-elf-gcc -mmcu=msp430g2553 -Os -I../h   -c -o Snake.o Snake.c
+Snake.c: In function 'snakeInit':
+Snake.c:10:21: warning: assignment from incompatible pointer type [-Wincompatible-pointer-types]
+  headLayer->abShape = (AbRect *)&headShape;
+                     ^
+Snake.c:11:19: error: expected expression before '{' token
+  headLayer->pos = {(screenWidth/2), (screenHeight/2)};
+                   ^
+Snake.c:21:19: warning: assignment from incompatible pointer type [-Wincompatible-pointer-types]
+  snake->headLayer = headLayer; // configure snake object
+                   ^
+Snake.c:23:19: warning: assignment from incompatible pointer type [-Wincompatible-pointer-types]
+  snake->direction = direction;
+                   ^
+Snake.c: In function 'snakeUpdate':
+Snake.c:32:19: error: dereferencing pointer to incomplete type 'struct Layer'
+   snake->headLayer->posLast = snake->headLayer->pos;
+                   ^~
+Snake.c:34:3: warning: implicit declaration of function 'vec2add' [-Wimplicit-function-declaration]
+   vec2add(snake->headLayer->posNext, snake->headLayer->posNext, snake->headLayer->direction);
+   ^~~~~~~
+Snake.c:36:25: warning: initialization from incompatible pointer type [-Wincompatible-pointer-types]
+   Layer* bodyLayerOne = snake->headLayer;
+                         ^~~~~
+Snake.c: In function 'snakeIsOutOfBounds':
+Snake.c:82:22: warning: initialization from incompatible pointer type [-Wincompatible-pointer-types]
+   Layer* headLayer = snake->headLayer; // only need to check the head (it's snake yo)
+                      ^~~~~
+Snake.c:85:8: error: 'axis' undeclared (first use in this function)
+   for (axis = 0; axis < 2; axis++) {
+        ^~~~
+Snake.c:85:8: note: each undeclared identifier is reported only once for each function it appears in
+Snake.c: In function 'snakeGrow':
+Snake.c:98:21: warning: assignment from incompatible pointer type [-Wincompatible-pointer-types]
+   newLayer->abShape = (AbRect *)&headShape;
+                     ^
+Snake.c:100:23: error: expected expression before '{' token
+   newLayer->posNext = {(Vec2)0,0};
+                       ^
+Snake.c:112:20: warning: assignment from incompatible pointer type [-Wincompatible-pointer-types]
+   snake->tailLayer = newLayer;
+                    ^
+Snake.c: In function 'snakeDraw':
+Snake.c:121:18: warning: assignment from incompatible pointer type [-Wincompatible-pointer-types]
+  for (snakeLayer = snake->headLayer; snakeLayer; snakeLayer = snakeLayer->next) { /* for each snake layer */
+                  ^
+Snake.c:131:21: warning: assignment from incompatible pointer type [-Wincompatible-pointer-types]
+     for (probeLayer = snake->headLayer; probeLayer; probeLayer = probeLayer->next) { /* probe all layers, in order */
+                     ^
+make[1]: *** [<builtin>: Snake.o] Error 1
+make[1]: Leaving directory '/home/student/Project 3/project-3-scfonowy/snake'
+make: *** [Makefile:9: all] Error 2

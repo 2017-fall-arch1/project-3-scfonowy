@@ -1,0 +1,40 @@
+msp430-elf-gcc -mmcu=msp430g2553 -Os -I../h   -c -o Snake.o Snake.c
+Snake.c: In function 'snakeInit':
+Snake.c:10:21: warning: assignment from incompatible pointer type [-Wincompatible-pointer-types]
+  headLayer->abShape = (AbRect *)&headShape;
+                     ^
+Snake.c:21:19: warning: assignment from incompatible pointer type [-Wincompatible-pointer-types]
+  snake->headLayer = headLayer; // configure snake object
+                   ^
+Snake.c:23:19: warning: assignment from incompatible pointer type [-Wincompatible-pointer-types]
+  snake->direction = direction;
+                   ^
+Snake.c: In function 'snakeUpdate':
+Snake.c:32:19: error: dereferencing pointer to incomplete type 'struct Layer'
+   snake->headLayer->posLast = snake->headLayer->pos;
+                   ^~
+Snake.c:34:3: warning: implicit declaration of function 'vec2add' [-Wimplicit-function-declaration]
+   vec2add(snake->headLayer->posNext, snake->headLayer->posNext, snake->headLayer->direction);
+   ^~~~~~~
+Snake.c:36:25: warning: initialization from incompatible pointer type [-Wincompatible-pointer-types]
+   Layer* bodyLayerOne = snake->headLayer;
+                         ^~~~~
+Snake.c: In function 'snakeIsOutOfBounds':
+Snake.c:82:22: warning: initialization from incompatible pointer type [-Wincompatible-pointer-types]
+   Layer* headLayer = snake->headLayer; // only need to check the head (it's snake yo)
+                      ^~~~~
+Snake.c: In function 'snakeGrow':
+Snake.c:99:21: warning: assignment from incompatible pointer type [-Wincompatible-pointer-types]
+   newLayer->abShape = (AbRect *)&headShape;
+                     ^
+Snake.c:113:20: warning: assignment from incompatible pointer type [-Wincompatible-pointer-types]
+   snake->tailLayer = newLayer;
+                    ^
+Snake.c: In function 'snakeDraw':
+Snake.c:122:18: warning: assignment from incompatible pointer type [-Wincompatible-pointer-types]
+  for (snakeLayer = snake->headLayer; snakeLayer; snakeLayer = snakeLayer->next) { /* for each snake layer */
+                  ^
+Snake.c:132:21: warning: assignment from incompatible pointer type [-Wincompatible-pointer-types]
+     for (probeLayer = snake->headLayer; probeLayer; probeLayer = probeLayer->next) { /* probe all layers, in order */
+                     ^
+make: *** [<builtin>: Snake.o] Error 1
