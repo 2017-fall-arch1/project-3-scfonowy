@@ -13,47 +13,54 @@ Snake* snake;
 Apple* apple;
 
 AbRectOutline field = {
-	abRectOutlineGetBounds, abRectOutlineCheck,
-	{screenWidth/2 - 10, screenHeight/2 - 10}
+  abRectOutlineGetBounds, abRectOutlineCheck,
+  {screenWidth/2 - 10, screenHeight/2 - 10}
 };
 
 Layer fieldLayer = {
-	(AbShape *)&field,
-	{screenWidth/2, screenHeight/2},
-	{0,0},{0,0},
-	COLOR_BLACK,
-	0 // next layer is the snake
+  (AbShape *)&field,
+  {screenWidth/2, screenHeight/2},
+  {0,0},{0,0},
+  COLOR_BLACK,
+  0 // next layer is the snake
 };
 
 void main() {
-    // setup
+  P1DIR |= GREEN_LED;    /**< Green led on when CPU on */
+  P1OUT |= GREEN_LED;
+  
+  // setup
   snake = snakeInit();
   apple = appleInit();
   fieldLayer.next = snake->headLayer;
-    configureClocks();
-    lcd_init();
-    clearScreen(COLOR_BLUE);
-	
-	layerInit(&fieldLayer);
-	layerDraw(&fieldLayer);
-	
-	enableWDTInterrupts();
-	or_sr(0x8);
-	
-	for(;;) {
-		while(!redrawScreen) {
-			or_sr(0x10);
-		}
-		redrawScreen = 0;
-		snakeDraw(snake);
-	}
+  configureClocks();
+  lcd_init();
+  clearScreen(COLOR_BLUE);
+  
+  layerInit(&fieldLayer);
+  layerDraw(&fieldLayer);
+  
+  enableWDTInterrupts();
+  or_sr(0x8);
+  
+  for(;;) {
+    while(!redrawScreen) {
+      P1OUT &= ~GREEN_LED;    /**< Green led off witHo CPU */
+      or_sr(0x10);
+    }
+    P1OUT |= GREEN_LED;       /**< Green led on when CPU on */
+    redrawScreen = 0;
+    snakeDraw(snake);
+  }
 }
 
 void wdt_c_handler() {
-	static short count = 0;
-	if (count == 15) {
-		snakeUpdate(snake);
-		count = 0;
-	}
-	count++;
+  static short count = 0;
+  P1OUT |= GREEN_LED;
+  if (count == 15) {
+    snakeUpdate(snake);
+    count = 0;
+  }
+  count++;
+  P1OUT &= ~GREEN_LED;  
 }
