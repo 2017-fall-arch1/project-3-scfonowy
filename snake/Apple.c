@@ -10,6 +10,7 @@ Apple* appleInit() {
   appleLayer->posNext = (Vec2){0,0};
   appleLayer->color = COLOR_RED;
   appleLayer->next = 0;
+  apple->appleLayer = appleLayer;
   
   return apple;
 }

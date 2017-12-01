@@ -7,7 +7,7 @@ Snake* snakeInit() {
   Snake* snake = (Snake *)malloc(sizeof(Snake)); // create snake object
   
   Layer* headLayer = (Layer *)malloc(sizeof(Layer)); // create & configure head shape layer
-  headLayer->abShape = (AbRect *)&headShape;
+  headLayer->abShape = (AbShape *)&headShape;
   headLayer->pos = (Vec2){(screenWidth/2), (screenHeight/2)};
   headLayer->posLast = (Vec2){0,0};
   headLayer->posNext = (Vec2){0,0};
@@ -31,7 +31,8 @@ void snakeUpdate(Snake* snake) {
   if (snake != 0) {
     snake->headLayer->posLast = snake->headLayer->pos;
     snake->headLayer->pos = snake->headLayer->posNext;
-    vec2add(snake->headLayer->posNext, snake->headLayer->posNext, snake->headLayer->direction);
+    snake->headLayer->posNext.axes[0] += snake->direction->axes[0];
+    snake->headLayer->posNext.axes[1] += snake->direction->axes[1];
     
     Layer* bodyLayerOne = snake->headLayer;
     Layer* bodyLayerTwo = snake->headLayer->next;
@@ -60,14 +61,14 @@ bool snakeIsEatingApple(Snake* snake, Apple* apple) {
   if (snake != 0 && apple != 0) {
     Region snakeBounds;
     Region appleBounds;
-    abShapeGetBounds(apple->appleLayer->abShape, apple->appleLayer->pos, &appleBounds);
-    abShapeGetBounds(snake->headLayer->abShape, snake->headLayer->pos, &snakeBounds);
+    abShapeGetBounds(apple->appleLayer->abShape, &apple->appleLayer->pos, &appleBounds);
+    abShapeGetBounds(snake->headLayer->abShape, &snake->headLayer->pos, &snakeBounds);
     int row;
     int col;
     for (row = appleBounds.topLeft.axes[1]; row <= appleBounds.botRight.axes[1]; row++) {
       for (col = appleBounds.topLeft.axes[0]; col <= appleBounds.botRight.axes[0]; col++) {
         Vec2 pixelPos = (Vec2){row, col};
-        if (abShapeCheck(snake->headLayer->abShape, snake->headLayer->pos, &pixelPos)) {
+        if (abShapeCheck(snake->headLayer->abShape, &snake->headLayer->pos, &pixelPos)) {
           return true;
         }
       }
@@ -81,7 +82,7 @@ bool snakeIsOutOfBounds(Snake* snake, Region* bounds) {
   if (snake != 0 && bounds != 0) {
     Layer* headLayer = snake->headLayer; // only need to check the head (it's snake yo)
     Region snakeBounds;
-    abShapeGetBounds(snake->headLayer->abShape, snake->headLayer->pos, &snakeBounds);
+    abShapeGetBounds(snake->headLayer->abShape, &snake->headLayer->pos, &snakeBounds);
     int axis;
     for (axis = 0; axis < 2; axis++) {
       if ((snakeBounds.topLeft.axes[axis] < bounds->topLeft.axes[axis]) || (snakeBounds.botRight.axes[axis] > bounds->botRight.axes[axis]) ) {
@@ -96,7 +97,7 @@ bool snakeIsOutOfBounds(Snake* snake, Region* bounds) {
 void snakeGrow(Snake* snake) {
   if (snake != 0) {
     Layer* newLayer = (Layer *)malloc(sizeof(Layer)); // create & configure the new segment layer
-    newLayer->abShape = (AbRect *)&headShape;
+    newLayer->abShape = (AbShape *)&headShape;
     newLayer->posLast = (Vec2){0,0}; // will be set by snakeUpdate()
     newLayer->posNext = (Vec2){0,0};
     newLayer->color = COLOR_WHITE;

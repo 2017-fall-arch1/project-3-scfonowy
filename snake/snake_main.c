@@ -6,6 +6,9 @@
 #include "Snake.h"
 #include "Apple.h"
 
+u_int bgColor = COLOR_BLUE;
+int redrawScreen = 1;
+
 Snake* snake = snakeInit();
 Apple* apple = appleInit();
 AbRectOutline field = {
@@ -19,7 +22,6 @@ Layer fieldLayer = {
 	{0,0},{0,0},
 	COLOR_BLACK,
 	snake->headLayer // next layer is the snake
-}
 
 void main() {
     // setup
