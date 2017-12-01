@@ -31,14 +31,13 @@ void snakeUpdate(Snake* snake) {
   if (snake != 0) {
     snake->headLayer->posLast = snake->headLayer->pos;
     snake->headLayer->pos = snake->headLayer->posNext;
-    snake->headLayer->posNext.axes[0] += snake->direction->axes[0];
-    snake->headLayer->posNext.axes[1] += snake->direction->axes[1];
+    snake->headLayer->posNext.axes[0] += 4*snake->direction->axes[0];
+    snake->headLayer->posNext.axes[1] += 4*snake->direction->axes[1];
     
     Layer* bodyLayerOne = snake->headLayer;
     Layer* bodyLayerTwo = snake->headLayer->next;
     
     while (bodyLayerOne != 0 && bodyLayerTwo != 0) { // iterate through and update positions of body segments
-      bodyLayerTwo->posNext = bodyLayerOne->pos;
       bodyLayerTwo->posLast = bodyLayerTwo->pos;
       bodyLayerTwo->pos = bodyLayerOne->posLast;
       bodyLayerOne = bodyLayerOne->next;
@@ -100,7 +99,7 @@ void snakeGrow(Snake* snake) {
     newLayer->abShape = (AbShape *)&headShape;
     newLayer->posLast = (Vec2){0,0}; // will be set by snakeUpdate()
     newLayer->posNext = (Vec2){0,0};
-    newLayer->color = COLOR_WHITE;
+    newLayer->color = COLOR_BLACK;
     newLayer->next = 0;
     
     if (snake->tailLayer != 0) { // default cause
@@ -110,7 +109,8 @@ void snakeGrow(Snake* snake) {
       newLayer->pos = snake->headLayer->pos;
       snake->headLayer->next = newLayer;
     }
-    
+    snake->tailLayer->pos.axes[1] += 4;
+    snake->tailLayer->pos.axes[0] += 4;
     snake->tailLayer = newLayer;
   }
 }
@@ -120,7 +120,7 @@ void snakeDraw(Snake* snake) {
   int row, col;
   Layer* snakeLayer;
   
-  for (snakeLayer = snake->headLayer; snakeLayer; snakeLayer = snakeLayer->next) { /* for each snake layer */
+  for (snakeLayer = snake->headLayer; snakeLayer; snakeLayer = snake->tailLayer) { /* for each snake layer */
     Region bounds;
     layerGetBounds(snakeLayer, &bounds);
     lcd_setArea(bounds.topLeft.axes[0], bounds.topLeft.axes[1], 

@@ -33,10 +33,15 @@ void main() {
   
   // setup
   snake = snakeInit();
+  snakeGrow(snake);
+  snakeGrow(snake);
   apple = appleInit();
-  fieldLayer.next = snake->headLayer;
+  fieldLayer.next = apple->appleLayer;
+  apple->appleLayer->next = snake->headLayer;
+  
   configureClocks();
   lcd_init();
+  p2sw_init(1);
   clearScreen(COLOR_BLUE);
   
   layerInit(&fieldLayer);
@@ -52,6 +57,7 @@ void main() {
     }
     P1OUT |= GREEN_LED;       /**< Green led on when CPU on */
     redrawScreen = 0;
+    //layerDraw(&fieldLayer);
     snakeDraw(snake);
   }
 }
@@ -59,7 +65,10 @@ void main() {
 void wdt_c_handler() {
   static short count = 0;
   P1OUT |= GREEN_LED;
-  if (count == 15) {
+  if (count == 50) {
+    if (p2sw_read()) {
+      redrawScreen = 1;
+    }
     snakeUpdate(snake);
     count = 0;
   }
