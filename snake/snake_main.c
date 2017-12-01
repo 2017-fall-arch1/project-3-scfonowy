@@ -6,6 +6,8 @@
 #include "Snake.h"
 #include "Apple.h"
 
+#define GREEN_LED BIT6;
+
 u_int bgColor = COLOR_BLUE;
 int redrawScreen = 1;
 
