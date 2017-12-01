@@ -10,14 +10,8 @@ AS              = msp430-elf-gcc -mmcu=${CPU} -c
 all:snake.elf
 
 #additional rules for files
-snake.elf: ${COMMON_OBJECTS} snake_main.o  Apple.o Snake.o  wdt_handler.o
+snake.elf: ${COMMON_OBJECTS} snake_main.o Apple.o Snake.o wdt_handler.o
 	${CC} ${CFLAGS} ${LDFLAGS} -o $@ $^ -lTimer -lLcd -lShape -lCircle -lp2sw
-
-Snake.o: Snake.c Snake.h Apple.h
-	${CC} ${CFLAGS} ${LDFLAGS} -lLcd -lShape -c Snake.c
-
-Apple.o: Apple.c Apple.h
-	${CC} ${CFLAGS} ${LDFLAGS} -lLcd -lShape -lCircle -c Apple.c
 
 load: snake.elf
 	mspdebug rf2500 "prog $^"

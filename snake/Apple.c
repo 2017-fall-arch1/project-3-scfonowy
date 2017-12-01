@@ -1,9 +1,9 @@
 #include "Apple.h"
 
 Apple* appleInit() {
-	Apple* apple = malloc(sizeof(Apple)); // create apple
+  Apple* apple = (Apple *)malloc(sizeof(Apple)); // create apple
 	
-	Layer* appleLayer = malloc(sizeof(Layer)); // create and configure apple layer
+  Layer* appleLayer = (Layer *)malloc(sizeof(Layer)); // create and configure apple layer
 	appleLayer->abShape = (AbShape *)&circle2;
 	appleLayer->posLast = (Vec2){0,0};
 	appleLayer->pos = (Vec2){screenWidth/2 + 10, screenHeight/2 + 10};
