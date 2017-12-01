@@ -9,22 +9,27 @@
 u_int bgColor = COLOR_BLUE;
 int redrawScreen = 1;
 
-Snake* snake = snakeInit();
-Apple* apple = appleInit();
+Snake* snake;
+Apple* apple;
+
 AbRectOutline field = {
 	abRectOutlineGetBounds, abRectOutlineCheck,
 	{screenWidth/2 - 10, screenHeight/2 - 10}
-}
+};
 
 Layer fieldLayer = {
 	(AbShape *)&field,
 	{screenWidth/2, screenHeight/2},
 	{0,0},{0,0},
 	COLOR_BLACK,
-	snake->headLayer // next layer is the snake
+	0 // next layer is the snake
+};
 
 void main() {
     // setup
+  snake = snakeInit();
+  apple = appleInit();
+  fieldLayer.next = snake->headLayer;
     configureClocks();
     lcd_init();
     clearScreen(COLOR_BLUE);

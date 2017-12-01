@@ -26,4 +26,6 @@ bool snakeIsOutOfBounds(Snake* snake, Region* bounds);
 
 void snakeGrow(Snake* snake);
 
+void snakeDraw(Snake* snake);
+
 #endif
