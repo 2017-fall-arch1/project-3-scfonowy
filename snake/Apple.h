@@ -9,7 +9,7 @@
 #include <stdlib.h>
 
 typedef struct Apple {
-	struct Layer* appleLayer;
+  struct Layer* appleLayer;
 } Apple;
 
 Apple* appleInit();

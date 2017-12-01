@@ -9,9 +9,9 @@
 #include "Apple.h"
 
 typedef struct Snake {
-	struct Layer* headLayer;
-	struct Layer* tailLayer;
-	struct Vec2* direction;
+  struct Layer* headLayer;
+  struct Layer* tailLayer;
+  struct Vec2* direction;
 } Snake;
 
 Snake* snakeInit();
