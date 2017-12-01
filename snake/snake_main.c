@@ -6,6 +6,13 @@
 #include "Snake.h"
 #include "Apple.h"
 
+u_int bgColor = COLOR_BLUE;
+
+int redrawScreen = 1;
+
+void wdt_c_handler() {
+  
+}
 
 void main() {
     // setup
