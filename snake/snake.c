@@ -7,11 +7,9 @@
 #include "Apple.h"
 
 
-int main() {
-	// setup
+void main() {
+    // setup
     configureClocks();
     lcd_init();
-	clearScreen(COLOR_BLUE);
-	
-	return 0;
+    clearScreen(COLOR_BLUE);
 }

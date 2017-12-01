@@ -1,4 +1,4 @@
-msp430-elf-gcc -mmcu=msp430g2553 -Os -I../h   -c -o Snake.o Snake.c
+msp430-elf-gcc -mmcu=msp430g2553 -Os -I../h -L../lib -L/opt/ti/msp430_gcc/include/  -c -lLcd -lShape Snake.c
 Snake.c: In function 'snakeInit':
 Snake.c:10:21: warning: assignment from incompatible pointer type [-Wincompatible-pointer-types]
   headLayer->abShape = (AbRect *)&headShape;
@@ -37,4 +37,4 @@ Snake.c:122:18: warning: assignment from incompatible pointer type [-Wincompatib
 Snake.c:132:21: warning: assignment from incompatible pointer type [-Wincompatible-pointer-types]
      for (probeLayer = snake->headLayer; probeLayer; probeLayer = probeLayer->next) { /* probe all layers, in order */
                      ^
-make: *** [<builtin>: Snake.o] Error 1
+make: *** [Makefile:17: Snake.o] Error 1
