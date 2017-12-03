@@ -9,7 +9,8 @@
 #define GREEN_LED BIT6;
 
 u_int bgColor = COLOR_BLUE;
-int redrawScreen = 1;
+char redrawScreen = 1;
+char score = 0;
 
 AbRectOutline field = {
   abRectOutlineGetBounds, abRectOutlineCheck,
@@ -36,7 +37,7 @@ void main() {
   
   configureClocks();
   lcd_init();
-  p2sw_init(1);
+  p2sw_init(15);
   clearScreen(COLOR_BLUE);
 
   snakeInit();
@@ -46,6 +47,9 @@ void main() {
   
   layerInit(&fieldLayer);
   layerDraw(&fieldLayer);
+  
+  drawString5x7(10,0,"Score:", COLOR_WHITE, COLOR_BLUE);
+  drawString5x7(screenWidth-20,0,"00", COLOR_WHITE, COLOR_BLUE);
   
   enableWDTInterrupts();
   or_sr(0x8);
@@ -65,11 +69,12 @@ void main() {
 void wdt_c_handler() {
   static short count = 0;
   P1OUT |= GREEN_LED;
-  if (count == 100) {
+  if (count == 50) {
     if (!snakeIsOutOfBounds(snake, &fieldFence)) {
 	snakeUpdate();
     }
     snakeDraw();
+    score++;
     count = 0;
   }
   count++;
