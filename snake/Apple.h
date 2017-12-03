@@ -6,16 +6,13 @@
 #include <abCircle.h>
 #include <lcdutils.h>
 #include <lcddraw.h>
-#include <stdlib.h>
 
 typedef struct Apple {
-  Layer* appleLayer;
+    Layer* appleLayer;
 } Apple;
 
-Apple* appleInit();
+extern Apple apple;
 
-void appleRespawn(Apple* apple);
-
-bool appleOutOfBounds(Apple* apple, Region* bounds);
+void appleRespawn();
 
 #endif

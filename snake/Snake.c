@@ -1,143 +1,118 @@
 #include "Snake.h"
 
-AbRect headShape = {abRectGetBounds, abRectCheck, {2,2}}; // shape of snake segments
+AbRect segmentShape = {abRectGetBounds, abRectCheck, {2,2}}; // shape of snake segments
 
-// creates and returns a new snake object of size 1
-Snake* snakeInit() {
-  Snake* snake = (Snake *)malloc(sizeof(Snake)); // create snake object
-  
-  Layer* headLayer = (Layer *)malloc(sizeof(Layer)); // create & configure head shape layer
-  headLayer->abShape = (AbShape *)&headShape;
-  headLayer->pos = (Vec2){(screenWidth/2), (screenHeight/2)};
-  headLayer->posLast = (Vec2){0,0};
-  headLayer->posNext = (Vec2){0,0};
-  headLayer->color = COLOR_WHITE;
-  headLayer->next = 0;
-  
-  Vec2* direction = (Vec2 *)malloc(sizeof(Vec2)); // create & configure direction vector
-  direction->axes[0] = 0; // x = 1 for left, -1 for right, 0 for no direction
-  direction->axes[1] = 1; // y = 1 for up, -1 for down, 0 for no direction
-  
-  snake->headLayer = headLayer; // configure snake object
-  snake->tailLayer = 0;
-  snake->direction = direction;
-  
-  return snake;
+Layer tailLayer = {
+    (AbShape *)&segmentShape,
+    {screenWidth/2, screenHeight/2},
+    {0,0},{0,0},
+    COLOR_BLUE,
+    0
+};
+
+Layer headLayer = {
+    (AbShape *)&segmentShape,
+    {screenWidth/2, screenHeight/2},
+    {0,0},{0,0},
+    COLOR_WHITE,
+    &tailLayer
+};
+
+Vec2 direction = (Vec2){0,-1};
+
+Vec2[25] segments;
+
+Snake snake = {
+    &headLayer,
+    &tailLayer,
+    &direction,
+    0, // size
+    segments
+};
+
+void snakeInit() {
+    int i;
+    // initialize all the segments
+    for (i = 0; i < 25; i++) {
+        snake->segments[i] = snake->headLayer->pos;
+    }
 }
 
-
 // updates all the snake segments according to direction vector
-void snakeUpdate(Snake* snake) {
-  if (snake != 0) {
+void snakeUpdate() {
+    // save prior position
     snake->headLayer->posLast = snake->headLayer->pos;
-    snake->headLayer->pos = snake->headLayer->posNext;
-    snake->headLayer->posNext.axes[0] += 4*snake->direction->axes[0];
-    snake->headLayer->posNext.axes[1] += 4*snake->direction->axes[1];
     
-    Layer* bodyLayerOne = snake->headLayer;
-    Layer* bodyLayerTwo = snake->headLayer->next;
+    // update position
+    snake->headLayer->pos.axes[0] += snake->direction.axes[0];
+    snake->headLayer->pos.axes[1] += snake->direction.axes[1];
     
-    while (bodyLayerOne != 0 && bodyLayerTwo != 0) { // iterate through and update positions of body segments
-      bodyLayerTwo->posLast = bodyLayerTwo->pos;
-      bodyLayerTwo->pos = bodyLayerOne->posLast;
-      bodyLayerOne = bodyLayerOne->next;
-      bodyLayerTwo = bodyLayerTwo->next;
+    int i;
+    for (i = 24; i > 0; i--) { // update segment position list
+        snake->segments[i] = snake->segments[i - 1];
     }
-  }
+    
+    snake->segments[0] = snake->headLayer->posLast; // update first non-head segment
 }
 
 // checks if the snake has collided with itself, returning true if so
-bool snakeIsEatingSelf(Snake* snake) {
-  if (snake != 0) {
-    //TODO:- Check collision
-  }
-  
-  return false; // a nonexistant snake cannot eat itself
+bool snakeIsEatingSelf() {
+    return false;
 }
 
 // checks if the snake has collided with an apple, returning true if so
-bool snakeIsEatingApple(Snake* snake, Apple* apple) {
-  if (snake != 0 && apple != 0) {
-    Region snakeBounds;
-    Region appleBounds;
-    abShapeGetBounds(apple->appleLayer->abShape, &apple->appleLayer->pos, &appleBounds);
-    abShapeGetBounds(snake->headLayer->abShape, &snake->headLayer->pos, &snakeBounds);
-    int row;
-    int col;
-    for (row = appleBounds.topLeft.axes[1]; row <= appleBounds.botRight.axes[1]; row++) {
-      for (col = appleBounds.topLeft.axes[0]; col <= appleBounds.botRight.axes[0]; col++) {
-        Vec2 pixelPos = (Vec2){row, col};
-        if (abShapeCheck(snake->headLayer->abShape, &snake->headLayer->pos, &pixelPos)) {
-          return true;
-        }
-      }
-    }
-  }
-  return false;
+bool snakeIsEatingApple() {
+    return false;
 }
 
 // checks if the snake has collided with the bounds, returning true if so
 bool snakeIsOutOfBounds(Snake* snake, Region* bounds) {
-  if (snake != 0 && bounds != 0) {
-    Layer* headLayer = snake->headLayer; // only need to check the head (it's snake yo)
-    Region snakeBounds;
-    abShapeGetBounds(snake->headLayer->abShape, &snake->headLayer->pos, &snakeBounds);
-    int axis;
-    for (axis = 0; axis < 2; axis++) {
-      if ((snakeBounds.topLeft.axes[axis] < bounds->topLeft.axes[axis]) || (snakeBounds.botRight.axes[axis] > bounds->botRight.axes[axis]) ) {
-        return true;
-      }
+    if (snake != 0 && bounds != 0) {
+        Layer* headLayer = snake->headLayer; // only need to check the head (it's snake yo)
+        Region snakeBounds;
+        abShapeGetBounds(snake->headLayer->abShape, &snake->headLayer->pos, &snakeBounds);
+        int axis;
+        for (axis = 0; axis < 2; axis++) {
+            if ((snakeBounds.topLeft.axes[axis] < bounds->topLeft.axes[axis]) || (snakeBounds.botRight.axes[axis] > bounds->botRight.axes[axis]) ) {
+                return true;
+            }
+        }
     }
-  }
-  return false;
+    return false;
 }
 
-// adds one segment to the snake (is overlaid on top of the tail for initial cycle)
-void snakeGrow(Snake* snake) {
-  if (snake != 0) {
-    Layer* newLayer = (Layer *)malloc(sizeof(Layer)); // create & configure the new segment layer
-    newLayer->abShape = (AbShape *)&headShape;
-    newLayer->posLast = (Vec2){0,0}; // will be set by snakeUpdate()
-    newLayer->posNext = (Vec2){0,0};
-    newLayer->color = COLOR_BLACK;
-    newLayer->next = 0;
-    
-    if (snake->tailLayer != 0) { // default cause
-      newLayer->pos = snake->tailLayer->pos;
-      snake->tailLayer->next = newLayer;
-    } else { // special case if this is the first additional segment
-      newLayer->pos = snake->headLayer->pos;
-      snake->headLayer->next = newLayer;
+// adds one segment to the snake
+void snakeGrow() {
+    if (snake->size < 24) {
+        snake->size++;
     }
-    snake->tailLayer->pos.axes[1] += 4;
-    snake->tailLayer->pos.axes[0] += 4;
-    snake->tailLayer = newLayer;
-  }
 }
 
 // draws a snake
-void snakeDraw(Snake* snake) {
-  int row, col;
-  Layer* snakeLayer;
-  
-  for (snakeLayer = snake->headLayer; snakeLayer; snakeLayer = snake->tailLayer) { /* for each snake layer */
+void snakeDraw() {
+    // since this is snake, we really only need to draw the head
+    // and then clear the space left by the tail
+    int row, col;
     Region bounds;
-    layerGetBounds(snakeLayer, &bounds);
-    lcd_setArea(bounds.topLeft.axes[0], bounds.topLeft.axes[1], 
-                bounds.botRight.axes[0], bounds.botRight.axes[1]);
+    
+    // draw head
+    layerGetBounds(snake->headLayer, &bounds);
+    lcd_setArea(bounds.topLeft.axes[0], bounds.topLeft.axes[1], bounds.botRight.axes[0], bounds.botRight.axes[1]);
+    lcd_writeColor(snake->headLayer->color);
+    
+    // draw tail
+    snake->tailLayer->pos = snake->segments[snake->size]; // set tail pos
+    layerGetBounds(snake->tailLayer, &bounds);
+    lcd_setArea(bounds.topLeft.axes[0], bounds.topLeft.axes[1], bounds.botRight.axes[0], bounds.botRight.axes[1]);
+    // apple may have spawned "under" the tail, so we want to draw it instead of blue
     for (row = bounds.topLeft.axes[1]; row <= bounds.botRight.axes[1]; row++) {
-      for (col = bounds.topLeft.axes[0]; col <= bounds.botRight.axes[0]; col++) {
-        Vec2 pixelPos = (Vec2){col, row};
-        u_int color = COLOR_BLUE;
-        Layer* probeLayer;
-        for (probeLayer = snake->headLayer; probeLayer; probeLayer = probeLayer->next) { /* probe all layers, in order */
-          if (abShapeCheck(probeLayer->abShape, &probeLayer->pos, &pixelPos)) {
-            color = probeLayer->color;
-            break; 
-          } /* if probe check */
-        } // for checking all layers at col, row
-        lcd_writeColor(color); 
-      } // for col
+        for (col = bounds.topLeft.axes[0]; col <= bounds.botRight.axes[0]; col++) {
+            Vec2 pixelPos = {col, row};
+            u_int color = COLOR_BLUE;
+            if (abShapeCheck(apple->appleLayer->abShape, &apple->appleLayer->pos, &pixelPos)) {
+                color = apple->appleLayer->color;
+            }
+            lcd_writeColor(color);
+        } // for col
     } // for row
-  } // for moving layer being updated
 }

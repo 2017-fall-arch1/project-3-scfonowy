@@ -11,9 +11,6 @@
 u_int bgColor = COLOR_BLUE;
 int redrawScreen = 1;
 
-Snake* snake;
-Apple* apple;
-
 AbRectOutline field = {
   abRectOutlineGetBounds, abRectOutlineCheck,
   {screenWidth/2 - 10, screenHeight/2 - 10}
@@ -24,7 +21,7 @@ Layer fieldLayer = {
   {screenWidth/2, screenHeight/2},
   {0,0},{0,0},
   COLOR_BLACK,
-  0 // next layer is the snake
+  0 // next layer will be the snake
 };
 
 void main() {
@@ -32,10 +29,6 @@ void main() {
   P1OUT |= GREEN_LED;
   
   // setup
-  snake = snakeInit();
-  snakeGrow(snake);
-  snakeGrow(snake);
-  apple = appleInit();
   fieldLayer.next = apple->appleLayer;
   apple->appleLayer->next = snake->headLayer;
   
@@ -58,7 +51,7 @@ void main() {
     P1OUT |= GREEN_LED;       /**< Green led on when CPU on */
     redrawScreen = 0;
     //layerDraw(&fieldLayer);
-    snakeDraw(snake);
+    snakeDraw();
   }
 }
 
@@ -66,10 +59,7 @@ void wdt_c_handler() {
   static short count = 0;
   P1OUT |= GREEN_LED;
   if (count == 50) {
-    if (p2sw_read()) {
-      redrawScreen = 1;
-    }
-    snakeUpdate(snake);
+    snakeUpdate();
     count = 0;
   }
   count++;
