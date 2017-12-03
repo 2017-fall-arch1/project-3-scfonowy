@@ -43,7 +43,7 @@ void main() {
   snakeInit();
   
   //appleInit();
-  layerGetBounds(&fieldLayer, &fieldFence);
+  abShapeGetBounds(&field, &fieldFence);
   
   layerInit(&fieldLayer);
   layerDraw(&fieldLayer);
