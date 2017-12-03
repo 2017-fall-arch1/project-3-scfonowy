@@ -8,7 +8,7 @@
 
 #define GREEN_LED BIT6;
 
-u_int bgColor = COLOR_BLUE;
+u_int bgColor = COLOR_BLACK;
 char redrawScreen = 1;
 char score = 0;
 
@@ -23,7 +23,7 @@ Layer fieldLayer = {
   (AbShape *)&field,
   {screenWidth/2, screenHeight/2},
   {0,0},{0,0},
-  COLOR_BLACK,
+  COLOR_WHITE,
   0 // next layer will be the snake
 };
 
@@ -38,7 +38,7 @@ void main() {
   configureClocks();
   lcd_init();
   p2sw_init(15);
-  clearScreen(COLOR_BLUE);
+  clearScreen(COLOR_BLACK);
   
   snakeInit();
   
@@ -48,8 +48,8 @@ void main() {
   layerInit(&fieldLayer);
   layerDraw(&fieldLayer);
   
-  drawString5x7(10,0,"Score:", COLOR_WHITE, COLOR_BLUE);
-  drawString5x7(screenWidth-20,0,"00", COLOR_WHITE, COLOR_BLUE);
+  drawString5x7(10,0,"Score:", COLOR_WHITE, COLOR_BLACK);
+  drawString5x7(screenWidth-20,0,"00", COLOR_WHITE, COLOR_BLACK);
   
   enableWDTInterrupts();
   or_sr(0x8);

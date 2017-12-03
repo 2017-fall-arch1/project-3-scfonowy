@@ -25,7 +25,7 @@ bool snakeIsEatingSelf();
 
 bool snakeIsEatingApple();
 
-bool snakeIsOutOfBounds(Snake* snake, Region* bounds);
+bool snakeIsOutOfBounds(Region* bounds);
 
 void snakeGrow();
 

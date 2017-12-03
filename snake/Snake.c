@@ -6,7 +6,7 @@ Layer tailLayer = {
   (AbShape *)&segmentShape,
   {(screenWidth/2),(screenHeight/2)+5},
   {0,0},{0,0},
-  COLOR_BLUE,
+  COLOR_BLACK,
   0
 };
 
@@ -18,7 +18,7 @@ Layer headLayer = {
   &tailLayer
 };
 
-Vec2 direction = (Vec2){0,-1};
+Vec2 direction = (Vec2){0,1};
 
 Vec2 segments[25];
 
@@ -117,7 +117,7 @@ void snakeDraw() {
   for (row = bounds.topLeft.axes[1]; row <= bounds.botRight.axes[1]; row++) {
     for (col = bounds.topLeft.axes[0]; col <= bounds.botRight.axes[0]; col++) {
       Vec2 pixelPos = {col, row};
-      u_int color = COLOR_BLUE;
+      u_int color = snake->tailLayer->color;
       if (abShapeCheck(apple->appleLayer->abShape, &apple->appleLayer->pos, &pixelPos)) {
         color = apple->appleLayer->color;
       }
