@@ -39,7 +39,7 @@ void main() {
   lcd_init();
   p2sw_init(15);
   clearScreen(COLOR_BLUE);
-
+  
   snakeInit();
   
   //appleInit();
@@ -70,13 +70,13 @@ void wdt_c_handler() {
   static short count = 0;
   P1OUT |= GREEN_LED;
   if (count == 50) {
-    if (!snakeIsOutOfBounds(snake, &fieldFence)) {
-	snakeUpdate();
+    if (!snakeIsOutOfBounds(&fieldFence)) {
+      snakeUpdate();
     }
     snakeDraw();
     score++;
     count = 0;
   }
   count++;
-  P1OUT &= ~GREEN_LED;  
+  P1OUT &= ~GREEN_LED;
 }
