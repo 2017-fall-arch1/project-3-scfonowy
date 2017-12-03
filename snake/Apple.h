@@ -11,7 +11,7 @@ typedef struct Apple {
     Layer* appleLayer;
 } Apple;
 
-extern Apple apple;
+extern Apple *apple;
 
 void appleRespawn();
 

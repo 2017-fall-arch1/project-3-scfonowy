@@ -36,6 +36,11 @@ void main() {
   lcd_init();
   p2sw_init(1);
   clearScreen(COLOR_BLUE);
+
+  snakeInit();
+  snakeGrow();
+
+  //appleInit();
   
   layerInit(&fieldLayer);
   layerDraw(&fieldLayer);
@@ -58,8 +63,9 @@ void main() {
 void wdt_c_handler() {
   static short count = 0;
   P1OUT |= GREEN_LED;
-  if (count == 50) {
+  if (count == 100) {
     snakeUpdate();
+    snakeDraw();
     count = 0;
   }
   count++;

@@ -4,7 +4,7 @@ AbRect segmentShape = {abRectGetBounds, abRectCheck, {2,2}}; // shape of snake s
 
 Layer tailLayer = {
     (AbShape *)&segmentShape,
-    {screenWidth/2, screenHeight/2},
+    {screenWidth/2,screenHeight/2},
     {0,0},{0,0},
     COLOR_BLUE,
     0
@@ -20,15 +20,17 @@ Layer headLayer = {
 
 Vec2 direction = (Vec2){0,-1};
 
-Vec2[25] segments;
+Vec2 segments[25];
 
-Snake snake = {
+Snake s = {
     &headLayer,
     &tailLayer,
     &direction,
     0, // size
     segments
 };
+
+Snake *snake = &s;
 
 void snakeInit() {
     int i;
@@ -44,8 +46,8 @@ void snakeUpdate() {
     snake->headLayer->posLast = snake->headLayer->pos;
     
     // update position
-    snake->headLayer->pos.axes[0] += snake->direction.axes[0];
-    snake->headLayer->pos.axes[1] += snake->direction.axes[1];
+    snake->headLayer->pos.axes[0] += 4*snake->direction->axes[0];
+    snake->headLayer->pos.axes[1] += 4*snake->direction->axes[1];
     
     int i;
     for (i = 24; i > 0; i--) { // update segment position list
@@ -53,6 +55,8 @@ void snakeUpdate() {
     }
     
     snake->segments[0] = snake->headLayer->posLast; // update first non-head segment
+    snake->tailLayer->posLast = snake->tailLayer->pos;
+    snake->tailLayer->pos = snake->segments[snake->size];
 }
 
 // checks if the snake has collided with itself, returning true if so
@@ -101,7 +105,6 @@ void snakeDraw() {
     lcd_writeColor(snake->headLayer->color);
     
     // draw tail
-    snake->tailLayer->pos = snake->segments[snake->size]; // set tail pos
     layerGetBounds(snake->tailLayer, &bounds);
     lcd_setArea(bounds.topLeft.axes[0], bounds.topLeft.axes[1], bounds.botRight.axes[0], bounds.botRight.axes[1]);
     // apple may have spawned "under" the tail, so we want to draw it instead of blue
@@ -112,7 +115,7 @@ void snakeDraw() {
             if (abShapeCheck(apple->appleLayer->abShape, &apple->appleLayer->pos, &pixelPos)) {
                 color = apple->appleLayer->color;
             }
-            lcd_writeColor(color);
+            //lcd_writeColor(color);
         } // for col
     } // for row
 }

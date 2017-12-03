@@ -6,11 +6,13 @@ Layer appleLayer = {
     {0,0}, {0,0},
     COLOR_RED,
     0
-}
-
-Apple apple = {
-    &appleLayer;
 };
+
+Apple a = {
+    &appleLayer
+};
+
+Apple *apple = &a;
 
 void appleRespawn();
 

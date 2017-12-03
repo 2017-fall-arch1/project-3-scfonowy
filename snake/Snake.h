@@ -12,8 +12,12 @@ typedef struct Snake {
     Layer* tailLayer;
     Vec2* direction;
     char size;
-    Vec2[5] segments;
+    Vec2 segments[25];
 } Snake;
+
+extern Snake *snake;
+
+void snakeInit();
 
 void snakeUpdate();
 
