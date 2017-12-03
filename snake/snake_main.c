@@ -16,6 +16,8 @@ AbRectOutline field = {
   {screenWidth/2 - 10, screenHeight/2 - 10}
 };
 
+Region fieldFence;
+
 Layer fieldLayer = {
   (AbShape *)&field,
   {screenWidth/2, screenHeight/2},
@@ -38,9 +40,9 @@ void main() {
   clearScreen(COLOR_BLUE);
 
   snakeInit();
-  snakeGrow();
-
+  
   //appleInit();
+  layerGetBounds(&fieldLayer, &fieldFence);
   
   layerInit(&fieldLayer);
   layerDraw(&fieldLayer);
@@ -64,7 +66,9 @@ void wdt_c_handler() {
   static short count = 0;
   P1OUT |= GREEN_LED;
   if (count == 100) {
-    snakeUpdate();
+    if (!snakeIsOutOfBounds(snake, &fieldFence)) {
+	snakeUpdate();
+    }
     snakeDraw();
     count = 0;
   }

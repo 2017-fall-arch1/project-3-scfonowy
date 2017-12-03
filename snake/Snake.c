@@ -4,7 +4,7 @@ AbRect segmentShape = {abRectGetBounds, abRectCheck, {2,2}}; // shape of snake s
 
 Layer tailLayer = {
     (AbShape *)&segmentShape,
-    {screenWidth/2,screenHeight/2},
+    {(screenWidth/2),(screenHeight/2)+5},
     {0,0},{0,0},
     COLOR_BLUE,
     0
@@ -13,7 +13,7 @@ Layer tailLayer = {
 Layer headLayer = {
     (AbShape *)&segmentShape,
     {screenWidth/2, screenHeight/2},
-    {0,0},{0,0},
+    {screenWidth/2,screenHeight/2},{screenWidth/2,screenWidth/2},
     COLOR_WHITE,
     &tailLayer
 };
@@ -44,10 +44,11 @@ void snakeInit() {
 void snakeUpdate() {
     // save prior position
     snake->headLayer->posLast = snake->headLayer->pos;
+    snake->headLayer->pos = snake->headLayer->posNext;
     
     // update position
-    snake->headLayer->pos.axes[0] += 4*snake->direction->axes[0];
-    snake->headLayer->pos.axes[1] += 4*snake->direction->axes[1];
+    snake->headLayer->posNext.axes[0] += 5*snake->direction->axes[0];
+    snake->headLayer->posNext.axes[1] += 5*snake->direction->axes[1];
     
     int i;
     for (i = 24; i > 0; i--) { // update segment position list
@@ -74,7 +75,7 @@ bool snakeIsOutOfBounds(Snake* snake, Region* bounds) {
     if (snake != 0 && bounds != 0) {
         Layer* headLayer = snake->headLayer; // only need to check the head (it's snake yo)
         Region snakeBounds;
-        abShapeGetBounds(snake->headLayer->abShape, &snake->headLayer->pos, &snakeBounds);
+        abShapeGetBounds(snake->headLayer->abShape, &snake->headLayer->posNext, &snakeBounds);
         int axis;
         for (axis = 0; axis < 2; axis++) {
             if ((snakeBounds.topLeft.axes[axis] < bounds->topLeft.axes[axis]) || (snakeBounds.botRight.axes[axis] > bounds->botRight.axes[axis]) ) {
