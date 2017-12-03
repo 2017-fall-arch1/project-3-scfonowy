@@ -18,7 +18,7 @@ Layer headLayer = {
   &tailLayer
 };
 
-Vec2 direction = (Vec2){0,1};
+Vec2 direction = (Vec2){-1,0};
 
 Vec2 segments[25];
 

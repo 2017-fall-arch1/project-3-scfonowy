@@ -43,7 +43,7 @@ void main() {
   snakeInit();
   
   //appleInit();
-  abShapeGetBounds(&field, &fieldFence);
+  abShapeGetBounds((AbShape *)&field, &fieldLayer.pos, &fieldFence);
   
   layerInit(&fieldLayer);
   layerDraw(&fieldLayer);
@@ -71,6 +71,10 @@ void wdt_c_handler() {
   P1OUT |= GREEN_LED;
   if (count == 50) {
     if (!snakeIsOutOfBounds(&fieldFence)) {
+      snakeUpdate();
+    } else {
+      snake->direction->axes[0] = (-1^snake->direction->axes[0]) + 1;
+      snake->direction->axes[1] = (-1^snake->direction->axes[1]) + 1;
       snakeUpdate();
     }
     snakeDraw();
