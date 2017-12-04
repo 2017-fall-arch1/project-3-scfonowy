@@ -6,7 +6,13 @@
 #include "Snake.h"
 #include "Apple.h"
 
-#define GREEN_LED BIT6;
+#define GREEN_LED BIT6  // Green LED bit
+
+#define SW1 BIT0        // Bits for different switches on P2
+#define SW2 BIT1
+#define SW3 BIT2
+#define SW4 BIT3
+#define SWITCHES (SW1 | SW2 | SW3 | SW4)    // All the switches on P2
 
 u_int bgColor = COLOR_BLACK;
 char redrawScreen = 1;
@@ -39,6 +45,24 @@ void scoreUpdate() {
   }
   
   drawString5x7(screenWidth-20,0,scoreString, COLOR_WHITE, COLOR_BLACK);
+}
+
+// checks switch states & updates direction
+void directionUpdate() {
+  unsigned int switches = p2sw_read();
+  char switchPositions = switches;
+  char switchesChanged = switches >> 8;
+  if (switchesChanged) { // a switch has changed
+    if (!(switchPositions & SW1)) { // left
+      snakeChangeDirection(SW1);
+    } else if (!(switchPositions & SW2)) { // up
+      snakeChangeDirection(SW2);
+    } else if (!(switchPositions & SW3)) { // down
+      snakeChangeDirection(SW3);
+    } else if (!(switchPositions & SW4)) { // right
+      snakeChangeDirection(SW4);
+    }
+  }
 }
 
 void main() {
@@ -83,6 +107,7 @@ void wdt_c_handler() {
   static short count = 0;
   P1OUT |= GREEN_LED;
   if (count == 50) {
+    directionUpdate();
     if (!snakeIsOutOfBounds(&fieldFence)) {
       snakeUpdate();
     } else {

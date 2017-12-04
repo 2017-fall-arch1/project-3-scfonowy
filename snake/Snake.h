@@ -21,6 +21,8 @@ void snakeInit();
 
 void snakeUpdate();
 
+void snakeChangeDirection(char dir);
+
 bool snakeIsEatingSelf();
 
 bool snakeIsEatingApple();

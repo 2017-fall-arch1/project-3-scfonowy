@@ -60,6 +60,25 @@ void snakeUpdate() {
   snake->tailLayer->pos = snake->segments[snake->size];
 }
 
+// changes direction and snake's next position
+void snakeChangeDirection(char dir) {
+  if (dir  == 1) { // left
+    snake->headLayer->direction->axes[0] = -1;
+    snake->headLayer->direction->axes[1] = 0;
+  } else if (dir == 2) { // up
+    snake->headLayer->direction->axes[0] = 0;
+    snake->headLayer->direction->axes[1] = -1;
+  } else if (dir == 4) { // down
+    snake->headLayer->direction->axes[0] = 0;
+    snake->headLayer->direction->axes[1] = 1;
+  } else if (dir == 8) { // right
+    snake->headLayer->direction->axes[0] = 1;
+    snake->headLayer->direction->axes[1] = 0;
+  }
+  snake->headLayer->posNext.axes[0] = snake->headLayer->pos.axes[0] + 5*snake->direction->axes[0];
+  snake->headLayer->posNext.axes[1] = snake->headLayer->pos.axes[1] + 5*snake->direction->axes[1];
+}
+
 // checks if the snake has collided with itself, returning true if so
 bool snakeIsEatingSelf() {
   return false;
