@@ -110,9 +110,11 @@ void main() {
 void wdt_c_handler() {
   static short count = 0;
   P1OUT |= GREEN_LED;
-  if (count == 50) {
-    speakerOff();
+  if (count % 10 == 0) {
     directionUpdate();
+  }
+  if (count == 100) {
+    speakerOff();
     if (!snakeIsOutOfBounds(&fieldFence)) {
       snakeUpdate();
     } else {
