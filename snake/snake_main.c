@@ -11,7 +11,7 @@
 u_int bgColor = COLOR_BLACK;
 char redrawScreen = 1;
 char score = 0;
-char scoreString[2] = "00";
+char scoreString[] = "00";
 
 AbRectOutline field = {
   abRectOutlineGetBounds, abRectOutlineCheck,
@@ -30,13 +30,12 @@ Layer fieldLayer = {
 
 // updates score label with current score
 void scoreUpdate() {
-  score++;
-  if (score % 10 == 0) {
+  if (score > 0 && score % 10 == 0) {
     scoreString[0]++;
     scoreString[1] = 48; // 0 digit
     score = 0;
   } else {
-    scoreString[1]++;
+    scoreString[1] = 48 + (score/23);
   }
   
   drawString5x7(screenWidth-20,0,scoreString, COLOR_WHITE, COLOR_BLACK);
@@ -56,7 +55,6 @@ void main() {
   clearScreen(COLOR_BLACK);
   
   snakeInit();
-  scoreUpdate();
   
   abShapeGetBounds((AbShape *)&field, &fieldLayer.pos, &fieldFence);
   
@@ -64,6 +62,7 @@ void main() {
   layerDraw(&fieldLayer);
   
   drawString5x7(10,0,"Score:", COLOR_WHITE, COLOR_BLACK);
+  scoreUpdate();
   
   enableWDTInterrupts();
   or_sr(0x8);
@@ -90,6 +89,7 @@ void wdt_c_handler() {
       snake->direction->axes[0] = (-1^snake->direction->axes[0]) + 1;
       snake->direction->axes[1] = (-1^snake->direction->axes[1]) + 1;
       scoreUpdate();
+      score++;
       snakeUpdate();
     }
     snakeDraw();
