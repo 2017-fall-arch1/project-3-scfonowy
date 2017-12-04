@@ -5,6 +5,7 @@
 #include <p2switches.h>
 #include "Snake.h"
 #include "Apple.h"
+#include "Speaker.h"
 
 #define GREEN_LED BIT6  // Green LED bit
 
@@ -53,6 +54,8 @@ void directionUpdate() {
   char switchPositions = switches;
   char switchesChanged = switches >> 8;
   if (switchesChanged) { // a switch has changed
+    speakerOn();
+    speakerSetTone(4000);
     if (!(switchPositions & SW1)) { // left
       snakeChangeDirection(SW1);
     } else if (!(switchPositions & SW2)) { // up
@@ -75,6 +78,7 @@ void main() {
   
   configureClocks();
   lcd_init();
+  speakerInit();
   p2sw_init(15);
   clearScreen(COLOR_BLACK);
   
@@ -107,6 +111,7 @@ void wdt_c_handler() {
   static short count = 0;
   P1OUT |= GREEN_LED;
   if (count == 50) {
+    speakerOff();
     directionUpdate();
     if (!snakeIsOutOfBounds(&fieldFence)) {
       snakeUpdate();
