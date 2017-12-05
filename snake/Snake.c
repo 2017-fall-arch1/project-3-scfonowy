@@ -37,6 +37,9 @@ void snakeInit() {
   snake->headLayer->pos = (Vec2){screenWidth/2, screenHeight/2};
   snake->headLayer->posNext = (Vec2){screenWidth/2, screenHeight/2};
   snake->tailLayer->pos = (Vec2){screenWidth/2, (screenHeight/2)+5};
+
+  // reset snake size
+  snake->size = 0;
   
   int i;
   // initialize all the segments

@@ -81,6 +81,8 @@ void gameReset() {
   
   drawString5x7(10,0,"Score:", COLOR_WHITE, COLOR_BLACK);
   score = 0;
+  scoreString[0] = '0';
+  scoreString[1] = '0';
   scoreUpdate();
 }
 
@@ -98,7 +100,6 @@ void main() {
   p2sw_init(15);
   
   gameReset();
-
   
   enableWDTInterrupts();
   or_sr(0x8);
@@ -125,6 +126,7 @@ void wdt_c_handler() {
     speakerOff();
     if (!snakeIsOutOfBounds(&fieldFence)) {
       snakeUpdate();
+      scoreUpdate();
     } else {
       speakerOn();
       speakerSetTone(6000);
