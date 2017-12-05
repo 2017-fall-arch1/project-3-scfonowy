@@ -38,11 +38,10 @@ Layer fieldLayer = {
 // updates score label with current score
 void scoreUpdate() {
     if (score > 0 && score % 10 == 0) {
-        scoreString[0]++;
+        scoreString[0] = 48 + (score/10);
         scoreString[1] = 48; // 0 digit
-        score = 0;
     } else {
-        scoreString[1] = 48 + (score/23);
+        scoreString[1] = 48 + score;
     }
     
     drawString5x7(screenWidth-20,0,scoreString, COLOR_WHITE, COLOR_BLACK);
