@@ -14,6 +14,23 @@ Apple a = {
 
 Apple *apple = &a;
 
-void appleRespawn();
+void appleRespawn(Vec2* newPos) {
+  apple->appleLayer->pos = &newPos;
+  appleDraw();
+}
 
-bool appleOutOfBounds();
+void appleDraw() {
+  // since this is snake, we really only need to draw the head
+  // and then clear the space left by the tail
+  int row, col;
+  Region bounds;
+  
+  // draw head
+  layerGetBounds(apple->appleLayer, &bounds);
+  lcd_setArea(bounds.topLeft.axes[0], bounds.topLeft.axes[1], bounds.botRight.axes[0], bounds.botRight.axes[1]);
+  for (row = bounds.topLeft.axes[1]; row <= bounds.botRight.axes[1]; row++) {
+    for (col = bounds.topLeft.axes[0]; col <= bounds.botRight.axes[0]; col++) {
+      lcd_writeColor(apple->appleLayer->color);
+    }
+  }
+}
