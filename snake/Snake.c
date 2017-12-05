@@ -1,12 +1,12 @@
 #include "Snake.h"
 
 // the shape of snake segments
-AbRect segmentShape = {abRectGetBounds, abRectCheck, {4,4}};
+AbRect segmentShape = {abRectGetBounds, abRectCheck, {2,2}};
 
 // layer of the tail, same color as background
 Layer tailLayer = {
   (AbShape *)&segmentShape,
-  {(screenWidth/2),(screenHeight/2)+9},
+  {(screenWidth/2),(screenHeight/2)+5},
   {0,0},{0,0},
   COLOR_BLACK,
   0
@@ -46,7 +46,7 @@ void snakeInit() {
   // reset snake position
   snake->headLayer->pos = (Vec2){screenWidth/2, screenHeight/2};
   snake->headLayer->posNext = (Vec2){screenWidth/2, screenHeight/2};
-  snake->tailLayer->pos = (Vec2){screenWidth/2, (screenHeight/2)+9};
+  snake->tailLayer->pos = (Vec2){screenWidth/2, (screenHeight/2)+5};
   
   // reset snake size
   snake->size = 0;
@@ -65,8 +65,8 @@ void snakeUpdate() {
   snake->headLayer->pos = snake->headLayer->posNext;
   
   // update position
-  snake->headLayer->posNext.axes[0] += 9*snake->direction->axes[0];
-  snake->headLayer->posNext.axes[1] += 9*snake->direction->axes[1];
+  snake->headLayer->posNext.axes[0] += 5*snake->direction->axes[0];
+  snake->headLayer->posNext.axes[1] += 5*snake->direction->axes[1];
   
   int i;
   // propogate previous positions down the list
