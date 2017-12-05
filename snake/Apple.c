@@ -17,13 +17,6 @@ Apple a = {
 // external reference to apple struct
 Apple *apple = &a;
 
-// moves the apple to the passed position & redraws
-// param newPos :: a pointer to an X,Y vector of the new position
-void appleRespawn(Vec2* newPos) {
-  apple->appleLayer->pos = &newPos;
-  appleDraw();
-}
-
 // draws the apple at its current position
 void appleDraw() {
   int row, col;
@@ -36,4 +29,12 @@ void appleDraw() {
       lcd_writeColor(apple->appleLayer->color);
     }
   }
+}
+
+// moves the apple to the passed position & redraws
+// param newPos :: a pointer to an X,Y vector of the new position
+void appleRespawn(Vec2* newPos) {
+  apple->appleLayer->pos.axes[0] = newPos->axes[0];
+  apple->appleLayer->pos.axes[1] = newPos->axes[1];
+  appleDraw();
 }

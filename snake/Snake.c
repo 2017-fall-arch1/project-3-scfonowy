@@ -111,7 +111,7 @@ bool snakeIsEatingSelf() {
   // if the snake's head shares a position with any of its history positions
   // up to the size of the snake
   int i;
-  for (i = 0; i < size; i++) {
+  for (i = 0; i < snake->size; i++) {
     if (snake->headLayer->pos.axes[0] == snake->segments[i].axes[0]
         && snake->headLayer->pos.axes[1] == snake->segments[i].axes[1]) {
       return true;
