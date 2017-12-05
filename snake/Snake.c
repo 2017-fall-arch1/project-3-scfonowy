@@ -33,6 +33,11 @@ Snake s = {
 Snake *snake = &s;
 
 void snakeInit() {
+  // reset snake position
+  snake->headLayer->pos = (Vec2){screenWidth/2, screenHeight/2};
+  snake->headLayer->posNext = (Vec2){screenWidth/2, screenHeight/2};
+  snake->tailLayer->pos = (Vec2){screenWidth/2, (screenHeight/2)+5};
+  
   int i;
   // initialize all the segments
   for (i = 0; i < 25; i++) {
@@ -62,16 +67,16 @@ void snakeUpdate() {
 
 // changes direction and snake's next position
 void snakeChangeDirection(char dir) {
-  if (dir  == 1) { // left
+  if (dir  == 1 && snake->direction->axes[0] == 0) { // left
     snake->direction->axes[0] = -1;
     snake->direction->axes[1] = 0;
-  } else if (dir == 2) { // up
+  } else if (dir == 2 && snake->direction->axes[1] == 0) { // up
     snake->direction->axes[0] = 0;
     snake->direction->axes[1] = -1;
-  } else if (dir == 4) { // down
+  } else if (dir == 4 && snake->direction->axes[1] == 0) { // down
     snake->direction->axes[0] = 0;
     snake->direction->axes[1] = 1;
-  } else if (dir == 8) { // right
+  } else if (dir == 8 && snake->direction->axes[0] == 0) { // right
     snake->direction->axes[0] = 1;
     snake->direction->axes[1] = 0;
   }

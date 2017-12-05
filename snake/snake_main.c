@@ -68,6 +68,22 @@ void directionUpdate() {
   }
 }
 
+// resets and redraws the game
+void gameReset() {
+  clearScreen(COLOR_BLACK);
+  
+  snakeInit();
+  
+  abShapeGetBounds((AbShape *)&field, &fieldLayer.pos, &fieldFence);
+  
+  layerInit(&fieldLayer);
+  layerDraw(&fieldLayer);
+  
+  drawString5x7(10,0,"Score:", COLOR_WHITE, COLOR_BLACK);
+  score = 0;
+  scoreUpdate();
+}
+
 void main() {
   P1DIR |= GREEN_LED;    /**< Green led on when CPU on */
   P1OUT |= GREEN_LED;
@@ -80,17 +96,9 @@ void main() {
   lcd_init();
   speakerInit();
   p2sw_init(15);
-  clearScreen(COLOR_BLACK);
   
-  snakeInit();
-  
-  abShapeGetBounds((AbShape *)&field, &fieldLayer.pos, &fieldFence);
-  
-  layerInit(&fieldLayer);
-  layerDraw(&fieldLayer);
-  
-  drawString5x7(10,0,"Score:", COLOR_WHITE, COLOR_BLACK);
-  scoreUpdate();
+  gameReset();
+
   
   enableWDTInterrupts();
   or_sr(0x8);
@@ -118,11 +126,9 @@ void wdt_c_handler() {
     if (!snakeIsOutOfBounds(&fieldFence)) {
       snakeUpdate();
     } else {
-      snake->direction->axes[0] = (-1^snake->direction->axes[0]) + 1;
-      snake->direction->axes[1] = (-1^snake->direction->axes[1]) + 1;
-      scoreUpdate();
-      score++;
-      snakeUpdate();
+      speakerOn();
+      speakerSetTone(6000);
+      gameReset();
     }
     snakeDraw();
     score++;
