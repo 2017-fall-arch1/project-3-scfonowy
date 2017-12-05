@@ -19,7 +19,7 @@ u_int bgColor = COLOR_BLACK;
 char redrawScreen = 1;
 
 char score = 0; // current score
-char scoreString[] = "00"; // string used to display current score
+char scoreString[] = "0000"; // string used to display current score
 
 // the field outline (i.e. fence)
 AbRectOutline field = {
@@ -46,7 +46,7 @@ void scoreUpdate() {
   scoreString[1] = 48 + (score%10);
   
   // draw the string
-  drawString5x7(screenWidth-20,0,scoreString, COLOR_WHITE, COLOR_BLACK);
+  drawString5x7(screenWidth-30,0,scoreString, COLOR_WHITE, COLOR_BLACK);
 }
 
 // checks switch states & updates direction
