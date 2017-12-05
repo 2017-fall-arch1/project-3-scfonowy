@@ -94,8 +94,8 @@ bool snakeIsEatingSelf() {
 
 // checks if the snake has collided with an apple, returning true if so
 bool snakeIsEatingApple() {
-  Region snakeHeadBounds;
-  abShapeGetBounds(snake->headLayer->abShape, &snake->headLayer->pos, &snakeBounds);
+  Region bounds;
+  abShapeGetBounds(snake->headLayer->abShape, &snake->headLayer->pos, &bounds);
   int row;
   int col;
   for (row = bounds.topLeft.axes[1]; row <= bounds.botRight.axes[1]; row++) {

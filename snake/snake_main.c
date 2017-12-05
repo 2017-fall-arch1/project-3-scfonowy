@@ -130,15 +130,15 @@ void wdt_c_handler() {
     } else if (snakeIsEatingApple()) {
       speakerOn();
       speakerSetTone(1500);
+      score++;
+      scoreUpdate();
       snakeGrow();
-    }
     } else {
       speakerOn();
       speakerSetTone(6000);
       gameReset();
     }
     snakeDraw();
-    score++;
     count = 0;
   }
   count++;
