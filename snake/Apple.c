@@ -2,7 +2,7 @@
 
 // layer used for drawing and position information
 Layer appleLayer = {
-  (AbShape *)&circle2,
+  (AbShape *)&circle3,
   {(screenWidth/2)+10, (screenHeight/2)+5},
   {0,0}, {0,0},
   COLOR_RED,
