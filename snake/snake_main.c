@@ -107,20 +107,11 @@ void main() {
   
   enableWDTInterrupts();
   or_sr(0x8);
-  
-//  for(;;) {
-//    while(!redrawScreen) {
-//      P1OUT &= ~GREEN_LED;    /**< Green led off witHo CPU */
-//      or_sr(0x10);
-//    }
-//    P1OUT |= GREEN_LED;       /**< Green led on when CPU on */
-//    redrawScreen = 0;
-//    snakeDraw(); // only need to redraw snake
-//  }
 }
 
 void wdt_c_handler() {
   static short count = 0;
+  static short cycle = 85; // "speed" of the game, lower = faster
   P1OUT |= GREEN_LED; // green LED on when CPU on
   
   if (count % 10 == 0) {
@@ -128,7 +119,7 @@ void wdt_c_handler() {
     directionUpdate();
   }
   
-  if (count == 100) {
+  if (count == cycle) {
     // turn off speaker
     speakerOff();
     
@@ -137,6 +128,7 @@ void wdt_c_handler() {
       speakerOn(); // play the Bad Beep
       speakerSetTone(6000);
       gameReset(); // reset game
+      cycle = 85; // reset "speed"
     } else {
       // snake is eating apple, play noise & grow snake
       if (snakeIsEatingApple()) {
@@ -151,6 +143,10 @@ void wdt_c_handler() {
         
         // respawn apple at tail position
         appleRespawn(&snake->segments[snake->size]);
+
+	if (score % 5 == 0) {
+	  cycle -= 15; // increase "speed" every 5 points
+	}
       } else {
         // game continues, update snake
         snakeUpdate();
