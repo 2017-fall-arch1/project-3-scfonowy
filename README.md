@@ -1,4 +1,4 @@
-#Project 3 - LCD Game (Snake!) - CS3432 Fall 2017
+# Project 3 - LCD Game (Snake!) - CS3432 Fall 2017
 --
 *Steven Brooks, last updated December 5th, 2017*
 ## Introduction
