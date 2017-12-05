@@ -127,6 +127,11 @@ void wdt_c_handler() {
     if (!snakeIsOutOfBounds(&fieldFence)) {
       snakeUpdate();
       scoreUpdate();
+    } else if (snakeIsEatingApple()) {
+      speakerOn();
+      speakerSetTone(1500);
+      snakeGrow();
+    }
     } else {
       speakerOn();
       speakerSetTone(6000);
