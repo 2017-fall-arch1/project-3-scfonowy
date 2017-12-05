@@ -1,7 +1,9 @@
 #include "Snake.h"
 
-AbRect segmentShape = {abRectGetBounds, abRectCheck, {2,2}}; // shape of snake segments
+// the shape of snake segments
+AbRect segmentShape = {abRectGetBounds, abRectCheck, {2,2}};
 
+// layer of the tail, same color as background
 Layer tailLayer = {
   (AbShape *)&segmentShape,
   {(screenWidth/2),(screenHeight/2)+5},
@@ -10,6 +12,7 @@ Layer tailLayer = {
   0
 };
 
+// layer of the head, white color
 Layer headLayer = {
   (AbShape *)&segmentShape,
   {screenWidth/2, screenHeight/2},
@@ -18,10 +21,15 @@ Layer headLayer = {
   &tailLayer
 };
 
+// direction vector of the snake
+// X: -1 is left, 1 is right
+// Y: -1 is up, 1 is down
 Vec2 direction = (Vec2){-1,0};
 
+// history of the head's positions, i.e. the segments
 Vec2 segments[25];
 
+// actual snake struct
 Snake s = {
   &headLayer,
   &tailLayer,
@@ -30,8 +38,10 @@ Snake s = {
   segments
 };
 
+// external reference to the snake struct
 Snake *snake = &s;
 
+// resets snake position, size, and initializes segments
 void snakeInit() {
   // reset snake position
   snake->headLayer->pos = (Vec2){screenWidth/2, screenHeight/2};
@@ -59,16 +69,20 @@ void snakeUpdate() {
   snake->headLayer->posNext.axes[1] += 5*snake->direction->axes[1];
   
   int i;
-  for (i = 24; i > 0; i--) { // update segment position list
+  // propogate previous positions down the list
+  for (i = 24; i > 0; i--) {
     snake->segments[i] = snake->segments[i - 1];
   }
   
   snake->segments[0] = snake->headLayer->posLast; // update first non-head segment
+  
+  // update tail
   snake->tailLayer->posLast = snake->tailLayer->pos;
   snake->tailLayer->pos = snake->segments[snake->size];
 }
 
 // changes direction and snake's next position
+// param dir :: a bit vector indicating what direction to change to
 void snakeChangeDirection(char dir) {
   // we don't want to register input for the same axis the snake is already moving
   // since the snake is either already moving in that direction, or cannot reverse
@@ -147,7 +161,7 @@ void snakeGrow() {
   }
 }
 
-// draws a snake
+// draws the snake
 void snakeDraw() {
   // since this is snake, we really only need to draw the head
   // and then clear the space left by the tail
@@ -162,7 +176,6 @@ void snakeDraw() {
       lcd_writeColor(snake->headLayer->color);
     }
   }
-  
   
   // draw tail
   layerGetBounds(snake->tailLayer, &bounds);

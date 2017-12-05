@@ -1,89 +1,62 @@
-# Project 3: LCD Game
+#Project 3 - LCD Game (Snake!) - CS3432 Fall 2017
+--
+*Steven Brooks, last updated December 5th, 2017*
 ## Introduction
+This project implements the game of Snake on an MSP430 with LCD LaunchPad attachment. The snake's direction can be changed via the four buttons on the LaunchPad attachment. In order, they are: Left, Up, Down, Right. The game is lost when the snake collides with the fence of the play area, or it collides with its own body. The score is increased (and the snake is grown) when the snake's head collides with the apple. Reach a score of 25 to win!
 
-Continuing your effort to help ACME Solutions provide Christmas toys, 
-your task is now to develop a game for the LCD screen.  You should 
-utilize the knowledge you havegained working with the buttons and 
-buzzer.  In addition, a series of libraries have been found to assist
-you in creating your game.
+## Setup & Running
+In order to run this program:
 
-Students can propose alternate projects that demonstrate
-similar skills.  These proposals must approved by the course
-instructor in writing (e.g. email) at least two weeks before the
-project due date. 
+1. Clone or download this repository.
+2. Navigate to the root folder of the repository.
+3. Run `$ make`.
+4. Ensure the MSP430 is plugged into the computer.
+5. Load the program onto the MSP430 with `$ make load`.
 
-## Requirements
-Your game should meet the following minimum criteria:
+If you wish to clean up the object files created during compilation, simply run `$ make clean` in the root folder of the repository.
 
-- dynamically render graphical elements that move
--- including one original algorithmically rendered graphical element 
-- handle colisions properly with other shapes and area boundaries
-- produce sounds triggered by game events
--- in a manner that does not cause the game to pause
-- communicate with the player using text
-- include a state machine written in assembly language
-- respond to user input (from buttons)
+## Program Overview
+The program makes use of several provided libraries that are not described here. A high level description is given of the follow "classes": Snake, Apple, and Speaker. Snake defines the functionality of the snake (how to draw, movement, etc.) Apple defines the functionality of the apple (how to draw, respawning.) Speaker defines the functionality of the speaker on the LaunchPad attachment (turning on, off, setting tone.)
 
-Don't forget to properly document your source code and how to play the game.
+### Snake
+The following table describes each function in the Snake header and what it does.
 
-## Grading Criteria
+| Name | Functionality  |
+|---|---|
+|  `snakeInit()` |  Initializes the snake to default values (size 0, center of screen, etc.)|
+|  `snakeUpdate()` | Updates the position of the snake according to its current direction. |
+|  `snakeChangeDirection(char dir)` | Updates the snake's direction according to the passed bit vector, corresponding to the bits of the switches on P2. |
+|  `snakeIsEatingSelf()` | Returns **true** if the snake's head is on top of one of its body segments, **false** otherwise. |
+|  `snakeIsEatingApple()` | Returns **true** if the snake's head is on top of the apple, **false** otherwise. |
+|  `snakeIsOutOfBounds(Region* bounds)` | Returns **true** if the snake's head has collided with the passed bounds, **false** otherwise. |
+|  `snakeGrow()` | Grows the snake by one segment. |
+|  `snakeDraw()` | Draws the snake on the screen. |
 
-Your lab will be graded based on the proficiencies it demonstrates.
-While we appreciate the complexity of an
-arcade quality game, our primary objective is that you demonstrate
-course-relevant skills including
+#### Points of Interest
+Efficiently drawing and managing the snake was an interesting exercise. Initially, the program tried to store an entire Layer object for each segment. This was highly inefficient usage of memory, as it stored a lot of redundant information: each segment was the same shape, color, etc. Furthermore, drawing the entire snake every cycle would be *very* slow for larger snakes.
 
-- relevant development tools such as make and emacs
-- use of timer interrupts to control program timing
-- use of switch interrupts to determine when swiches change
-- modularization into multiple source files (including header files)
-- use of explicit state machines to implement program functionality
-- ability to develop or modify (and of course use) linked data structures in c
-- mature programming
--- readable, appropriate algorithms, modularization, data structures, symbol names etc
+To draw the snake efficiently, the program only draws the *new* position of the head and "erases" the previous position of the tail (using the tail layer.) This means that regardless of the snake's size, the program only has to draw two snake segments: one for the new head, and one for the old tail (matching the background color, i.e. "erasing.")
 
-Below is an example of a sample "pong" application that would fully satisfy
-requirments.  The graphics would include
+Since the program handles drawing this way, the only information that we need to store for each segment is a running history of the head's positions, and at what point in that history the tail should be at. An array of position vectors is used to store this information, much more memory efficient than a layer for each segment.
 
-- an arena to play in
-- a ball
-- two paddles (using a shape of your own design)
-- a score
+### Apple
+The following table describes each function in the Snake header and what it does.
 
-And behaviors that include
+| Name | Functionality  |
+|---|---|
+|  `appleRespawn(Vec2* newPos)` |  Respawns and redraws the apple at the passed X,Y position vector. |
 
-- the ball moves in 2d, with direction changing when it collides with
-  screen elements
-- a sound plays when a collision occurs
--- without causing the ball's motion to pause
-- scores
- - that advance through multiple rounds of play
- - that the ball either moves in-front-of or behind
+### Speaker
+The Speaker header defines four methods. Speaker code was also provided by Dr. Freudenthal for a previous lab and refactored slightly, but mostly unchanged.
 
-## Libraries
+| Name | Functionality  |
+|---|---|
+|  `speakerInit()` |  Initializes the speaker for output. |
+|  `speakerOn()` |  Enables output on the speaker. |
+|  `speakerOff()` |  Disables output on the speaker. |
+|  `speakerSetTone(char tone)` | Sets what tone the speaker should be playing according to the passed `short`. |
 
-Several libraries are provided.  
-They can be installed by the default production of Makefile in the repostiory's 
-root directory, or by a "$make install" in each of their subdirs.
+## Attributions
+Several sources were used in the completion of this lab.
 
-- timerLib: Provides code to configure Timer A to generate watchdog timer interrupts at 250 Hz
-
-- p2SwLib: Provides an interrupt-driven driver for the four switches on the LCD board and a demo program illustrating its intended functionality.
-
-- lcdLib: Provides low-level lcd control primitives, defines several fonts, 
-and a simple demo program that uses them.
-
-- shapeLib: Provides an translatable model for shapes that can be translated 
-and rendered as layers.
-
-- circleLib: Provides a circle model as a vector of demi-chord lengths,
-pre-computed circles as layers with a variety of radii, 
-and a demonstration program that renders a circle.
-
-
-## Demonstration program
-
-- shape-motion-demo: A demonstration program that uses shapeLib to represent
-and render shapes that move.
-
-
+1. Dr. Eric Freudenthal's provided timer, shape, LCD utility, and switch libraries and and demo programs (and, of course, the Makefiles that accompanied them).

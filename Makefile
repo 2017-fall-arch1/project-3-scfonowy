@@ -4,10 +4,10 @@ all:
 	(cd shapeLib; make install)
 	(cd circleLib; make install)
 	(cd p2swLib; make install)
-	(cd p2sw-demo; make)
-	(cd shape-motion-demo; make)
 	(cd snake; make)
 
+load: all
+	(cd snake; make load)
 doc:
 	rm -rf doxygen_docs
 	doxygen Doxyfile
