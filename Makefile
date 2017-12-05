@@ -16,9 +16,7 @@ clean:
 	(cd lcdLib; make clean)
 	(cd shapeLib; make clean)
 	(cd p2swLib; make clean)
-	(cd p2sw-demo; make clean)
 	(cd snake; make clean)
-	(cd shape-motion-demo; make clean)
 	(cd circleLib; make clean)
 	rm -rf lib h
 	rm -rf doxygen_docs/*
