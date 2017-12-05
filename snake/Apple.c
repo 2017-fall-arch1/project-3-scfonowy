@@ -22,7 +22,7 @@ void appleDraw() {
   int row, col;
   Region bounds;
   
-  layerGetBounds(apple->appleLayer, &bounds);
+  abShapeGetBounds(apple->appleLayer->abShape, &apple->appleLayer->pos, &bounds);
   lcd_setArea(bounds.topLeft.axes[0], bounds.topLeft.axes[1], bounds.botRight.axes[0], bounds.botRight.axes[1]);
   for (row = bounds.topLeft.axes[1]; row <= bounds.botRight.axes[1]; row++) {
     for (col = bounds.topLeft.axes[0]; col <= bounds.botRight.axes[0]; col++) {
