@@ -137,12 +137,19 @@ void wdt_c_handler() {
         
         score++; // update score
         scoreUpdate();
+
+	if (score == 25) { // game won
+	  speakerOn(); // play the Good Beep
+          speakerSetTone(1250);
+          gameReset(); // reset game
+          cycle = 85; // reset "speed"
+	} else {
+	  snakeGrow(); // grow snake
+          snakeUpdate();
+          // respawn apple at tail position
+          appleRespawn(&snake->segments[snake->size]);
+	}
         
-        snakeGrow(); // grow snake
-        snakeUpdate();
-        
-        // respawn apple at tail position
-        appleRespawn(&snake->segments[snake->size]);
 
 	if (score % 5 == 0) {
 	  cycle -= 15; // increase "speed" every 5 points
