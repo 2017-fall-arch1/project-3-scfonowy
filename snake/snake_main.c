@@ -124,19 +124,21 @@ void wdt_c_handler() {
   }
   if (count == 100) {
     speakerOff();
-    if (!snakeIsOutOfBounds(&fieldFence)) {
-      snakeUpdate();
-      scoreUpdate();
-    } else if (snakeIsEatingApple()) {
+    if (snakeIsOutOfBounds(&fieldFence)) {
+      speakerOn();
+      speakerSetTone(6000);
+      gameReset();
+    } else {
+     if (snakeIsEatingApple()) {
       speakerOn();
       speakerSetTone(1500);
       score++;
       scoreUpdate();
       snakeGrow();
     } else {
-      speakerOn();
-      speakerSetTone(6000);
-      gameReset();
+      snakeUpdate();
+      scoreUpdate();
+    } 
     }
     snakeDraw();
     count = 0;
