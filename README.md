@@ -2,7 +2,7 @@
 --
 *Steven Brooks, last updated December 5th, 2017*
 ## Introduction
-This project implements the game of Snake on an MSP430 with LCD LaunchPad attachment. The snake's direction can be changed via the four buttons on the LaunchPad attachment. In order, they are: Left, Up, Down, Right. The game is lost when the snake collides with the fence of the play area, or it collides with its own body. The score is increased (and the snake is grown) when the snake's head collides with the apple. Reach a score of 25 to win!
+This project implements the game of Snake on an MSP430 with LCD BoosterPack attachment. The snake's direction can be changed via the four buttons on the BoosterPack attachment. In order, they are: Left, Up, Down, Right. The game is lost when the snake collides with the fence of the play area, or it collides with its own body. The score is increased (and the snake is grown) when the snake's head collides with the apple. Reach a score of 25 to win!
 
 ## Setup & Running
 In order to run this program:
@@ -16,7 +16,7 @@ In order to run this program:
 If you wish to clean up the object files created during compilation, simply run `$ make clean` in the root folder of the repository.
 
 ## Program Overview
-The program makes use of several provided libraries that are not described here. A high level description is given of the follow "classes": Snake, Apple, and Speaker. Snake defines the functionality of the snake (how to draw, movement, etc.) Apple defines the functionality of the apple (how to draw, respawning.) Speaker defines the functionality of the speaker on the LaunchPad attachment (turning on, off, setting tone.)
+The program makes use of several provided libraries that are not described here. A high level description is given of the follow "classes": Snake, Apple, and Speaker. Snake defines the functionality of the snake (how to draw, movement, etc.) Apple defines the functionality of the apple (how to draw, respawning.) Speaker defines the functionality of the speaker on the BoosterPack attachment (turning on, off, setting tone.)
 
 ### Snake
 The following table describes each function in the Snake header and what it does.
