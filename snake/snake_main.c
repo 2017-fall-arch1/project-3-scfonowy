@@ -46,7 +46,7 @@ void scoreUpdate() {
   scoreString[1] = 48 + (score%10);
   
   // draw the string
-  drawString5x7(screenWidth-30,0,scoreString, COLOR_WHITE, COLOR_BLACK);
+  drawString5x7(screenWidth-32,0,scoreString, COLOR_WHITE, COLOR_BLACK);
 }
 
 // checks switch states & updates direction
