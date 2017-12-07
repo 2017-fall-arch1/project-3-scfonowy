@@ -15,7 +15,7 @@
 #define SW4 BIT3
 #define SWITCHES (SW1 | SW2 | SW3 | SW4)    // All the switches on P2
 
-void incrCount(char* count); // prototype for asm function
+void incrCount(short* count); // prototype for asm function
 
 u_int bgColor = COLOR_BLACK;
 char redrawScreen = 1;
