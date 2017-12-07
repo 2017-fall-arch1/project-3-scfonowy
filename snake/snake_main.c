@@ -15,6 +15,8 @@
 #define SW4 BIT3
 #define SWITCHES (SW1 | SW2 | SW3 | SW4)    // All the switches on P2
 
+void incrCount(char* count); // prototype for asm function
+
 u_int bgColor = COLOR_BLACK;
 char redrawScreen = 1;
 
@@ -163,6 +165,6 @@ void wdt_c_handler() {
     count = 0; // reset count
   }
   
-  count++;
+  incrCount(&count);
   P1OUT &= ~GREEN_LED; // green LED off when CPU off
 }
