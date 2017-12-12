@@ -16,7 +16,7 @@
 #define SWITCHES (SW1 | SW2 | SW3 | SW4)    // All the switches on P2
 
 void incrCount(short* count); // prototype for asm function
-void incrScore(char* scoreString); // prototype for asm function
+void incrScore(char* scoreString, short score); // prototype for asm function
 
 u_int bgColor = COLOR_BLACK;
 char redrawScreen = 1;
@@ -45,9 +45,9 @@ Layer fieldLayer = {
 // updates score label with current score
 void scoreUpdate() {
   // NOTE: 48 is ASCII value of '0'
-//  scoreString[0] = 48 + (score/10);
-//  scoreString[1] = 48 + (score%10);
-  incrScore(scoreString);
+  scoreString[0] = 48 + (score/10);
+  scoreString[1] = 48 + (score%10);
+//  incrScore(scoreString, score);
   
   // draw the string
   drawString5x7(screenWidth-32,0,scoreString, COLOR_WHITE, COLOR_BLACK);
